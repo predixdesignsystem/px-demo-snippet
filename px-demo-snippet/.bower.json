@@ -1,0 +1,11 @@
+{
+  "name": "px-demo-snippet",
+  "_cacheHeaders": {
+    "Content-Type": "text/html; charset=utf-8"
+  },
+  "main": "index",
+  "_source": "https://github.com/predixdev/px-demo-snippet",
+  "_target": "*",
+  "_originalSource": "https://github.com/predixdev/px-demo-snippet",
+  "_direct": true
+}

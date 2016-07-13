@@ -1,0 +1,35 @@
+{
+  "name": "px-clipboard",
+  "main": [
+    "px-clipboard.html"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "Gruntfile.js",
+    "sass",
+    "bower_components",
+    "node_modules",
+    "test"
+  ],
+  "dependencies": {
+    "polymer": "~1.4.0",
+    "px-theme": "~0.7.1",
+    "clipboard": "~1.5.12",
+    "polymer-font-awesome": "https://github.com/mdwragg/polymer-font-awesome.git#~0.1.4"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
+    "px-starter-kit-design": "~0.5.5"
+  },
+  "homepage": "https://github.com/predixDev/px-clipboard",
+  "_release": "ed2258d2aa",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ed2258d2aab6903e8d4a1529c9e70182e05c5603"
+  },
+  "_source": "https://github.com/predixDev/px-clipboard.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/predixDev/px-clipboard.git"
+}
