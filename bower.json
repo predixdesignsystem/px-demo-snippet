@@ -18,7 +18,7 @@
     "polymer": "^1.6.0",
     "px-theme": "~0.7.1",
     "juicy-ace-editor": "~1.1.2",
-    "px-clipboard": "^0.0.1"
+    "px-clipboard": "https://github.com/PredixDev/px-clipboard.git"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
