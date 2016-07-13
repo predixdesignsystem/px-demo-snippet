@@ -1,0 +1,182 @@
+<!--
+    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
+    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
+    'grunt depserve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
+-->
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../juicy-ace-editor/juicy-ace-editor.html" />
+<link rel="import" href="../px-clipboard/px-clipboard.html" />
+<link rel="import" href="aceExtensions.html" />
+
+<!--
+px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
+
+##### Usage
+
+    <px-demo-snippet
+      element-properties={{elemProps}}
+      element-name="px-dropdown">
+    </px-demo-snippet>
+
+@element px-demo-snippet
+@blurb px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
+@homepage index.html
+@demo demo.html
+-->
+<dom-module id="px-demo-snippet">
+  <link rel="import" type="css" href="css/px-demo-snippet.css"/>
+  <template>
+    <div class="flex demoCode u-mt+">
+      <div class="editor">
+        <juicy-ace-editor theme="ace/theme/dawn" mode="ace/mode/html" wrapmode softtabs id="jeditor">{{_output}}</juicy-ace-editor>
+      </div>
+      <div>
+        <px-clipboard data-clipboard-text="{{_output}}"></px-clipboard>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+
+    is: 'px-demo-snippet',
+
+    /**
+     * Properties block, expose attribute values to the DOM via 'notify'
+     *
+     * @property properties
+     * @type Object
+     */
+    properties: {
+      /**
+       * A property that holds the name of the component
+       * for which we are displaying the source
+       *
+       * @property elementName
+       * @type String
+       */
+      elementName: {
+        type: String,
+        value: '',
+      },
+      /**
+       * An object that holds all the properties for the element
+       * for which we are displaying the source
+       *
+       * @property elementProperties
+       * @type Object
+       */
+      elementProperties: {
+        type: Object
+      },
+      /**
+       * An object that holds a reference to the component
+       * for which we are displaying the source
+       *
+       * @property _demoElement
+       * @type Object
+       */
+      _demoElement: {
+        type: Object
+      },
+      /**
+       * A string - that is created dynamically by the options selected on the page -
+       * that reflects the unrendered component code
+       *
+       * @property _demoElement
+       * @type Object
+       */
+      _output : {
+        type: String,
+        notify: true
+      }
+    },
+    observers: ['_elementPropertyChanged(elementProperties.*)', '_setPropertyChanger(elementName)'],
+    attached: function() {
+      //first, make sure to find the component we are doing the demo on
+      this._findDemoElement();
+      //when Polymer is ready, set the following options on Juice Ace Editor.
+      this.async(function() {
+        this.$.jeditor.editor.setHighlightActiveLine(false);
+        this.$.jeditor.editor.getSession().setUseWorker(false);
+        this.$.jeditor.editor.renderer.setShowGutter(false);
+      });
+
+    },
+    /**
+    * This method is called through the deep observer, whenever a property is changed
+    * by the user. it calls _setPropertyChanger and _formatComponentString.
+    *
+    * @method _elementPropertyChanged
+    */
+    _elementPropertyChanged: function(changeRecord) {
+      var prop = changeRecord.path,
+          value = changeRecord.value;
+      prop = prop.substr( prop.indexOf('.') + 1 );
+      this._setPropertyChanger(prop, value);
+      this._formatComponentString();
+    },
+    /**
+    * This method searches the document for the component demoed.
+    * and sets a reference in _demoElement to that component.
+    *
+    * @method _findDemoElement
+    */
+    _findDemoElement: function() {
+      //find the demo component
+      var demoElem = document.querySelector(this.elementName);
+      if (demoElem) { //and if it's there, set it inside _demoElement
+        this._demoElement = demoElem;
+      }
+    },
+    /**
+    * This method searches the document for the component demoed.
+    * and sets a reference in _demoElement to that component.
+    *
+    * @method _setPropertyChanger
+    */
+    /**
+    * This event is fired when a property is changed by the user.
+    *
+    * @event pxDemoPropertyChanged
+    */
+    _setPropertyChanger: function(prop, value) {
+      if (this._demoElement) { //make sure the component exists, and if so, call Polymer set directly on it.
+        this._demoElement.set(prop, value);
+        // and fire an event.
+        this.fire('pxDemoPropertyChanged', {"property" : prop, "value": value});
+      }
+    },
+    /**
+    * This method formats the string which is the unrendered code for the component
+    * we are domoing
+    *
+    * @method _formatComponentString
+    */
+    _formatComponentString: function() {
+      //define our opening string with an opening <
+      var result = '<' + this.elementName,
+          value;
+      // and loop through all the properties passed to us.
+      for (var prop in this.elementProperties) {
+        value = this.elementProperties[prop];
+        if (value) { //check that value is there AND is NOT false. false attributes should NOT be passed
+          if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
+            value = JSON.stringify(value);
+          }
+          //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
+          result += ' ' + Polymer.CaseMap.camelToDashCase(prop) + '="' + value + '"';
+        }
+      }
+      //close off our string
+      result += '></' + this.elementName + '>';
+      //and set _output, using data binding to pass it into juicy ace editor and px-clipboard
+      this._output = result;
+      //just to be on the safe side, we reset result
+      result = '';
+      //and ask juicy ace editor to resize, in case the code doesn't fit in the window it originally opened.
+      this.$.jeditor.editor.resize();
+    }
+  });
+</script>
