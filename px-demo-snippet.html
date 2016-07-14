@@ -5,6 +5,7 @@
 -->
 <link rel="import" href="../polymer/polymer.html"/>
 <link rel="import" href="../juicy-ace-editor/juicy-ace-editor.html" />
+<link rel="import" href="../ace-widget/ace-widget.html">
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
 <link rel="import" href="aceExtensions.html" />
 
@@ -26,9 +27,14 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
 <dom-module id="px-demo-snippet">
   <link rel="import" type="css" href="css/px-demo-snippet.css"/>
   <template>
+    <style media="screen">
+      .ace-widget-0 #editor.ace-widget {
+        border: o !important;
+      }
+    </style>
     <div class="flex demoCode u-mt+">
       <div class="editor">
-        <juicy-ace-editor theme="ace/theme/dawn" mode="ace/mode/html" wrapmode softtabs id="jeditor">{{_output}}</juicy-ace-editor>
+        <ace-widget id="jeditor"  minlines="10" maxlines="10" theme="ace/theme/dawn" mode="ace/mode/html" wrap softtabs>{{_output}}</ace-widget>
       </div>
       <div>
         <px-clipboard data-clipboard-text="{{_output}}"></px-clipboard>
@@ -89,7 +95,8 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
        */
       _output : {
         type: String,
-        notify: true
+        notify: true,
+        observer: '_changeEditorContent'
       }
     },
     observers: ['_elementPropertyChanged(elementProperties.*)', '_setPropertyChanger(elementName)'],
@@ -101,7 +108,14 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
         this.$.jeditor.editor.setHighlightActiveLine(false);
         this.$.jeditor.editor.getSession().setUseWorker(false);
         this.$.jeditor.editor.renderer.setShowGutter(false);
+        this.$.jeditor.editor.setOption({minLines: 10, maxLines: 10});
+        this.$.jeditor.editor.setOption("showPrintMargin", false);
       });
+
+    },
+    _changeEditorContent: function() {
+
+        this.$.jeditor.editor.setValue(this._output);
 
     },
     /**
