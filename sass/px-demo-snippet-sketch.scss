@@ -36,14 +36,12 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 
 
 // Component
-juicy-ace-editor {
-  margin-right: calculateRem(20px);
-}
 .editor {
   flex-basis: 91%;
 }
 // Trumps
 $inuit-enable-margins--large: true;
+$inuit-enable-margins--small: true;
 @import "px-spacing-design/_trumps.spacing.scss";
 @import "inuit-clearfix/_trumps.clearfix.scss";
 @import "px-spacing-responsive-design/_trumps.spacing-responsive.scss";
