@@ -12,7 +12,8 @@
     "bower_components",
     "node_modules",
     "test",
-    ".github"
+    ".github",
+    "OSS_Notice.pdf"
   ],
   "dependencies": {
     "polymer": "^1.6.0",
