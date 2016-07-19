@@ -1,3 +1,7 @@
+v0.0.7
+=================
+* changed px-clipboard call to 0.0.4
+
 v0.0.6
 =================
 * downgraded polymer to 1.5
