@@ -1,3 +1,7 @@
+v0.0.4
+=================
+* added top padding to clipboard
+
 v0.0.3
 ==================
 * removed default top margin
