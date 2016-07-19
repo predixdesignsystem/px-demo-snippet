@@ -1,6 +1,6 @@
 {
   "name": "px-demo-snippet",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": [
     "px-demo-snippet.html"
   ],
@@ -16,7 +16,7 @@
     "OSS_Notice.pdf"
   ],
   "dependencies": {
-    "polymer": "^1.6.0",
+    "polymer": "^1.5.0",
     "px-theme": "^0.8.0",
     "px-clipboard": "^0.0.1",
     "ace-widget": "LostInBrittany/ace-widget#~1.0.13"

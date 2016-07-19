@@ -1,3 +1,7 @@
+v0.0.6
+=================
+* downgraded polymer to 1.5
+
 v0.0.5
 =================
 * changed how content is inserted into editor
