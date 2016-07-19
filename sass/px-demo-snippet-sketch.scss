@@ -39,6 +39,9 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 .editor {
   flex-basis: 91%;
 }
+.clipboard {
+  padding-top: 10px;
+}
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;

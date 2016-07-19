@@ -564,6 +564,9 @@ a {
   -ms-flex-preferred-size: 91%;
       flex-basis: 91%; }
 
+.clipboard {
+  padding-top: 10px; }
+
 /**
  * Margin and padding helper classes. Use these to tweak layout on a micro
  * level.
