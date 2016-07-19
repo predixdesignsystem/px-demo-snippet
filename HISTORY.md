@@ -1,3 +1,7 @@
+v0.0.5
+=================
+* changed how content is inserted into editor
+
 v0.0.4
 =================
 * added top padding to clipboard
