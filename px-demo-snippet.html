@@ -28,7 +28,7 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
   <template>
     <div class="flex demoCode">
       <div class="editor u-mr+">
-        <ace-widget id="jeditor"  minlines="10" maxlines="10" theme="ace/theme/chrome" mode="ace/mode/html" wrap softtabs>{{_output}}</ace-widget>
+        <ace-widget id="jeditor"  minlines="10" maxlines="10" theme="ace/theme/chrome"  wrap softtabs></ace-widget>
       </div>
       <div class="clipboard">
         <px-clipboard data-clipboard-text="{{_output}}"></px-clipboard>
@@ -97,13 +97,14 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
     attached: function() {
       //first, make sure to find the component we are doing the demo on
       this._findDemoElement();
-      //when Polymer is ready, set the following options on Juice Ace Editor.
+      //when Polymer is ready, set the following options on ace widget.
       this.async(function() {
         this.$.jeditor.editor.setHighlightActiveLine(false);
         this.$.jeditor.editor.getSession().setUseWorker(false);
         this.$.jeditor.editor.renderer.setShowGutter(false);
         this.$.jeditor.editor.setOption({minLines: 10, maxLines: 10});
         this.$.jeditor.editor.setOption("showPrintMargin", false);
+        this._changeEditorContent();
       });
 
     },
@@ -180,7 +181,7 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
       //and set _output, using data binding to pass it into ace widget and px-clipboard
       this._output = result;
       //just to be on the safe side, we reset result
-      result = '';
+      //result = '';
       //and ask ace widget to resize, in case the code doesn't fit in the window it originally opened.
       this.$.jeditor.editor.resize();
     }
