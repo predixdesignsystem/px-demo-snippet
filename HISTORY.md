@@ -1,3 +1,7 @@
+v0.0.8
+=================
+* added checker for object - if value is object, wrap it in single quotes, otherwise, double quotes. also, added html mode back into editor
+
 v0.0.7
 =================
 * changed px-clipboard call to 0.0.4
