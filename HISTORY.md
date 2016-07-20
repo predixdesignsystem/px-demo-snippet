@@ -1,3 +1,7 @@
+v0.0.9
+=================
+* changed bower file to match px-theme bower designation
+
 v0.0.8
 =================
 * added checker for object - if value is object, wrap it in single quotes, otherwise, double quotes. also, added html mode back into editor
