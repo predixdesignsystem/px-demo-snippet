@@ -104,6 +104,7 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
         this.$.jeditor.editor.renderer.setShowGutter(false);
         this.$.jeditor.editor.setOption({minLines: 10, maxLines: 10});
         this.$.jeditor.editor.setOption("showPrintMargin", false);
+        this.$.jeditor.editor.$blockScrolling = 1;
         this._changeEditorContent();
       });
 
@@ -167,16 +168,18 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
           value;
       // and loop through all the properties passed to us.
       for (var prop in this.elementProperties) {
-        var isObj = false;
+        var singleQuotes = false;
         value = this.elementProperties[prop];
         if (value) { //check that value is there AND is NOT false. false attributes should NOT be passed
           if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
             value = JSON.stringify(value);
-            isObj = true;
+            singleQuotes = true;
+          } else if (Array.isArray(value)) {
+            singleQuotes = true;
           }
           //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
           result += ' ' + Polymer.CaseMap.camelToDashCase(prop) +
-          ((isObj) ? '=\'' :  '="') + value + ((isObj) ? '\'' :  '"');
+          ((singleQuotes) ? '=\'' :  '="') + value + ((singleQuotes) ? '\'' :  '"');
         }
       }
       //close off our string

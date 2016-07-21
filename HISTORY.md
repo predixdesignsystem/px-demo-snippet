@@ -1,3 +1,7 @@
+v0.0.10
+=================
+* added travis
+
 v0.0.9
 =================
 * changed bower file to match px-theme bower designation
