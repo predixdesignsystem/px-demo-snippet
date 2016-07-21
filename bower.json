@@ -24,5 +24,8 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
     "px-starter-kit-design": "~0.5.5"
+  },
+  "resolutions": {
+    "polymer": "^1.5.0"
   }
 }
