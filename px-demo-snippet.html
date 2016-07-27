@@ -11,6 +11,8 @@
 <!--
 px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
 
+In addiction to element properties, you can also pass in light dom content, by including a "lightDomContent" property in the corresponding object inside elementProperties
+
 ##### Usage
 
     <px-demo-snippet
@@ -165,12 +167,13 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
     _formatComponentString: function() {
       //define our opening string with an opening <
       var result = '<' + this.elementName,
-          value;
+          value,
+          lightDomContent;
       // and loop through all the properties passed to us.
       for (var prop in this.elementProperties) {
         var singleQuotes = false;
         value = this.elementProperties[prop];
-        if (value) { //check that value is there AND is NOT false. false attributes should NOT be passed
+        if (value && prop !== "lightDomContent") { //check that value is there AND is NOT false. false attributes should NOT be passed
           if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
             value = JSON.stringify(value);
             singleQuotes = true;
@@ -180,10 +183,18 @@ px-demo-snippet is a helper element that displays the un-rendered code of the co
           //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
           result += ' ' + Polymer.CaseMap.camelToDashCase(prop) +
           ((singleQuotes) ? '=\'' :  '="') + value + ((singleQuotes) ? '\'' :  '"');
+        } else if (prop === "lightDomContent") {
+          lightDomContent = value; //save the value to insert later - we have to close the tag first, and the order is never guaranteed with a for in loop.
         }
       }
       //close off our string
-      result += '></' + this.elementName + '>';
+      result += '>';
+      //check if we have any light dom content, and if so, insert it to the string.
+      if (lightDomContent) { //if we have a light dom content, insert it now
+        result += lightDomContent;
+        lightDomContent = ''; //and empty it, just to be safe.
+      }
+      result += '</' + this.elementName + '>';
       //and set _output, using data binding to pass it into ace widget and px-clipboard
       this._output = result;
     }
