@@ -1,3 +1,7 @@
+v0.1.1
+=================
+* changing px-clipboard in bower
+
 v0.1.0
 =================
 * added light dom content support
