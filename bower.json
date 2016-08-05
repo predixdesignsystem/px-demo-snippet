@@ -20,7 +20,7 @@
     "polymer": "^1.5.0",
     "px-theme": "~0.8.0",
     "px-clipboard": "^0.0.9",
-    "ace-widget": "LostInBrittany/ace-widget~1.0.14"
+    "ace-widget": "~1.0.14"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
