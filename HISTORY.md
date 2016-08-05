@@ -1,6 +1,10 @@
-v0.1.1
+v0.1.2
 =================
 * changing px-clipboard in bower
+
+v0.1.1
+=================
+* added flex grow to editor class
 
 v0.1.0
 =================

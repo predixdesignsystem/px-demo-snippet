@@ -562,7 +562,9 @@ a {
 
 .editor {
   -ms-flex-preferred-size: 91%;
-      flex-basis: 91%; }
+      flex-basis: 91%;
+  -ms-flex-positive: 1;
+      flex-grow: 1; }
 
 .clipboard {
   padding-top: 10px; }

@@ -38,6 +38,7 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 // Component
 .editor {
   flex-basis: 91%;
+  flex-grow: 1;
 }
 .clipboard {
   padding-top: 10px;
