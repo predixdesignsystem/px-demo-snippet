@@ -37,15 +37,22 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 
 // Component
 .editor {
-  flex-basis: 91%;
+  flex-basis: 85%;
+  min-height: calculateRem(100px);
   flex-grow: 1;
+  border-bottom-left-radius: 5px;
 }
 .clipboard {
-  padding-top: 10px;
+  border-bottom-right-radius: 5px;
+}
+.demoCode {
+  background-color:#eee;
 }
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;
+$inuit-enable-padding--small: true;
+$inuit-enable-padding--medium: true;
 @import "px-spacing-design/_trumps.spacing.scss";
 @import "inuit-clearfix/_trumps.clearfix.scss";
 @import "px-spacing-responsive-design/_trumps.spacing-responsive.scss";

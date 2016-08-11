@@ -2,7 +2,7 @@
 
 ## Overview
 
-px-demo-snippet is a Predix UI component which display the un-rendered code of a component inside a text editor.
+px-demo-snippet is a Predix UI component which display the un-rendered, highlighted code of a component.
 
 ## Usage
 

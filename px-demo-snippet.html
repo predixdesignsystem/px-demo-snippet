@@ -5,6 +5,7 @@
 -->
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
+<link rel="import" href="../prism-element/prism-highlighter.html" />
 
 
 
@@ -29,17 +30,16 @@ In addiction to element properties, you can also pass in light dom content, by i
 <dom-module id="px-demo-snippet">
   <link rel="import" type="css" href="css/px-demo-snippet.css"/>
   <template>
-    <prism-element code="[[_output]]"></prism-element>
+    <prism-highlighter></prism-highlighter>
     <div class="flex demoCode">
-      <div class="editor u-mr+">
-        <div>
-          <code id="jeditor"></code>
+      <div class="editor u-mr+ u-p-">
+        <div id="jeditor"></div>
       </div>
-      </div>
-      <div class="clipboard">
+      <div class="clipboard u-pr+ u-pt-">
         <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
       </div>
     </div>
+
   </template>
 </dom-module>
 
@@ -103,18 +103,21 @@ In addiction to element properties, you can also pass in light dom content, by i
     attached: function() {
       //first, make sure to find the component we are doing the demo on
       this._findDemoElement();
-      //this._render();
     },
     _render: function() {
-      console.log("rendering" + this._output);
       var  output = this._fireOutputEvent(this._output, 'html');
-      console.log("output = " + output);
       this.$.jeditor.innerHTML = output;
-
     },
-    _fireOutputEvent: function() {
-      var code = this._output;
-      return this.fire('syntax-highlight', {code: code, lang: 'html'}).detail.code;
+    /**
+    *
+    * This method fires a syntax-highlight event (meant for prism-highlighter), and returns the code, with formatting.
+    *
+    * @method _fireOutputEvent
+    * @return {Highlighted Code}
+    */
+    _fireOutputEvent: function(code, lang) {
+      //this fires an event that is changed through prism-element.
+      return this.fire('syntax-highlight', {code: code, lang: lang}).detail.code;
     },
     /**
     * This method is called through the deep observer, whenever a property is changed
@@ -168,7 +171,7 @@ In addiction to element properties, you can also pass in light dom content, by i
     */
     _formatComponentString: function() {
       //define our opening string with an opening <
-      var result = '&lt;' + this.elementName,
+      var result = '<' + this.elementName,
           value,
           lightDomContent;
       // and loop through all the properties passed to us.
@@ -190,15 +193,15 @@ In addiction to element properties, you can also pass in light dom content, by i
         }
       }
       //close off our string
-      result += '&gt;';
+      result += '>';
       //check if we have any light dom content, and if so, insert it to the string.
       if (lightDomContent) { //if we have a light dom content, insert it now
         result += lightDomContent;
         lightDomContent = ''; //and empty it, just to be safe.
       }
-      result += '&lt;/' + this.elementName + '&gt;';
+      result += '</' + this.elementName + '>';
       //and set _output, using data binding to pass it into ace widget and px-clipboard
-      this._output = result;
+      this.set('_output',result);
     }
   });
 </script>
