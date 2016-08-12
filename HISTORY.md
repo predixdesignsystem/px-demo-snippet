@@ -1,3 +1,7 @@
+v0.1.4
+=================
+* created temp hack until we figure out the event listener for prism"
+
 v0.1.3
 =================
 * removed ace-widget and replaced with prism-element
