@@ -103,10 +103,16 @@ In addiction to element properties, you can also pass in light dom content, by i
     attached: function() {
       //first, make sure to find the component we are doing the demo on
       this._findDemoElement();
+      this._formatComponentString();
     },
     _render: function() {
       var  output = this._fireOutputEvent(this._output, 'html');
-      this.$.jeditor.innerHTML = output;
+
+      if (output.substr(0, 5) === '<span') {
+        this.$.jeditor.innerHTML = output;
+      } else {
+        this.$.jeditor.textContent = output;
+      }
     },
     /**
     *
