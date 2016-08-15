@@ -108,10 +108,11 @@ In addiction to element properties, you can also pass in light dom content, by i
     _render: function() {
       var  output = this._fireOutputEvent(this._output, 'html');
 
-      if (output.substr(0, 5) === '<span') {
-        this.$.jeditor.innerHTML = output;
+      if (output.substr(0, 5) !== '<span') {
+        //prism highlighter hasn't loaded yet. run this again with async.
+        this.async(this._render, 0);
       } else {
-        this.$.jeditor.textContent = output;
+        this.$.jeditor.innerHTML = output;
       }
     },
     /**
