@@ -1,6 +1,6 @@
 {
   "name": "px-demo-snippet",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": [
     "px-demo-snippet.html"
   ],
@@ -20,7 +20,8 @@
     "polymer": "^1.5.0",
     "px-theme": "~0.8.0",
     "px-clipboard": "^0.0.11",
-    "prism-element": "PolymerElements/prism-element#~1.1.0"
+    "prism-element": "PolymerElements/prism-element#~1.1.0",
+    "px-simple-horizontal-bar-chart": "^0.5.8"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",

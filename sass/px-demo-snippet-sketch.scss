@@ -41,6 +41,7 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
   min-height: calculateRem(100px);
   flex-grow: 1;
   border-bottom-left-radius: 5px;
+  word-break: break-all;
 }
 .clipboard {
   border-bottom-right-radius: 5px;
@@ -48,6 +49,13 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 .demoCode {
   background-color:#eee;
 }
+
+@media (max-width: 750px) {
+  .editor {
+    word-break: break-all;
+  }
+}
+
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;

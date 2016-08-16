@@ -1,3 +1,7 @@
+v0.1.6
+=================
+* added css break-all words to editor
+
 v0.1.5
 =================
 * changed the call to prism-highlighter so that it is async, and is run after everything's been loaded.

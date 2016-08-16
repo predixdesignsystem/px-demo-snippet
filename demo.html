@@ -11,15 +11,17 @@
     <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
     <link rel="import" href="px-demo-snippet.html" />
     <link rel="import" href="../px-theme/px-theme.html" />
+    <link rel="import" href="../px-simple-horizontal-bar-chart/px-simple-horizontal-bar-chart.html" />
   </head>
 
   <body>
 
     <h3>Demo</h3>
     <template is="dom-bind">
+
       <px-demo-snippet
         element-properties={{elemProps}}
-        element-name="px-demo-snippet">
+        element-name="px-simple-horizontal-bar-chart">
       </px-demo-snippet>
     </template>
 
@@ -27,11 +29,22 @@
     //for demo purposes only. use data binding in your app instead.
 
     window.addEventListener('WebComponentsReady', function() {
-    var template = document.querySelector('template[is=dom-bind]');
+      var template = document.querySelector('template[is=dom-bind]');
 
-    template.elemProps = {
-      "elementName": "px-demo-snippet"
-    };
+      template.elemProps = {
+        "chartData":[ 88, 7, 54, 33, 12, 75, 99],
+        "width":550,
+        "height":200,
+        "legendLabels" :["Florida", "Kentucky","Maryland","Michigan","Nevada", "Vermont"],
+        "colors" :["#EA3556", "#64938D", "#EDE5E2", "#ED146F", "#EDDE45", "#9BF0E9"],
+        "barLabels": ["values","percentage"],
+        "range":{"from":"2016-01-01T01:00:00.000Z","to":"2016-07-01T11:00:00.000Z"},
+        "date-format":"YYYY/MM/DD",
+        "time-format":"hh:mm:ss A",
+        "show-buttons":true,
+        "show-time-zone":"text",
+        "time-zone":"UTC"
+      };
     });
     </script>
   </body>

@@ -579,13 +579,18 @@ a {
   min-height: 6.6666666667rem;
   -ms-flex-positive: 1;
       flex-grow: 1;
-  border-bottom-left-radius: 5px; }
+  border-bottom-left-radius: 5px;
+  word-break: break-all; }
 
 .clipboard {
   border-bottom-right-radius: 5px; }
 
 .demoCode {
   background-color: #eee; }
+
+@media (max-width: 750px) {
+  .editor {
+    word-break: break-all; } }
 
 /**
  * Margin and padding helper classes. Use these to tweak layout on a micro
