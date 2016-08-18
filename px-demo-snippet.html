@@ -11,16 +11,52 @@
 
 
 <!--
-px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
+px-demo-snippet is a helper element that displays the un-rendered code of the component requested, along with a clipboard button that - when clicked on - copies the output to the user's clipboard.
 
-In addiction to element properties, you can also pass in light dom content, by including a "lightDomContent" property in the corresponding object inside elementProperties
+### Usage
 
-##### Usage
+Import the element:
 
+```
+<link rel="import" href="px-demo-snippet.html" />
+```
+
+And insert the element into your code.
+
+```
     <px-demo-snippet
       element-properties={{elemProps}}
-      element-name="px-dropdown">
+      element-name="px-modal">
     </px-demo-snippet>
+```
+
+The last step is to data-bind an object with properties to the element (elemProps in the example above):
+
+```
+{
+  "sampleProp0": "value",
+  "sampleProp1": "value"
+  "lightDomContent": "this is placed inside the component output.",
+  "parentComponent": ["<my-element show-option='true'>","</my-element>"]
+}
+```
+
+There are 2 special properties that demo-snippet looks for, and are NOT included in the output's attributes:
+  1. lightDomContent - the value of this is placed into the component between the opening and closing tags.
+
+  ##### example output for lightDomContent with the options above:
+
+  ```
+  <px-modal>this is placed inside the component output.</px-modal>
+  ```
+
+  2. parentComponent - this is an array that holds the opening and closing tags of the parent component. You may include attributes in these - just remember to use the correct quotes for attributes.
+
+  ##### example output for lightDomContent and parentComponent with the options above:
+
+  ```
+  <my-element show-option='true'><px-modal>this is placed inside the component output.</px-modal></my-element>
+  ```
 
 @element px-demo-snippet
 @blurb px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
@@ -178,37 +214,48 @@ In addiction to element properties, you can also pass in light dom content, by i
     */
     _formatComponentString: function() {
       //define our opening string with an opening <
-      var result = '<' + this.elementName,
+      var result ='',
           value,
           lightDomContent;
-      // and loop through all the properties passed to us.
-      for (var prop in this.elementProperties) {
-        var singleQuotes = false;
-        value = this.elementProperties[prop];
-        if (value && prop !== "lightDomContent") { //check that value is there AND is NOT false. false attributes should NOT be passed
-          if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
-            value = JSON.stringify(value);
-            singleQuotes = true;
-          } else if (Array.isArray(value)) {
-            singleQuotes = true;
-          }
-          //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
-          result += ' ' + Polymer.CaseMap.camelToDashCase(prop) +
-          ((singleQuotes) ? '=\'' :  '="') + value + ((singleQuotes) ? '\'' :  '"');
-        } else if (prop === "lightDomContent") {
-          lightDomContent = value; //save the value to insert later - we have to close the tag first, and the order is never guaranteed with a for in loop.
+
+      if (this.elementProperties) {
+        if (this.elementProperties['parentComponent']) {
+          result += this.elementProperties['parentComponent'][0];
         }
+        result +='<' + this.elementName;
+        // and loop through all the properties passed to us.
+        for (var prop in this.elementProperties) {
+          var singleQuotes = false;
+          value = this.elementProperties[prop];
+          if (value && prop !== "lightDomContent" && prop !== "parentComponent") { //check that value is there AND is NOT false. false attributes should NOT be passed
+            if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
+              value = JSON.stringify(value);
+              singleQuotes = true;
+            } else if (Array.isArray(value)) {
+              singleQuotes = true;
+            }
+            //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
+            result += ' ' + Polymer.CaseMap.camelToDashCase(prop) +
+            ((singleQuotes) ? '=\'' :  '="') + value + ((singleQuotes) ? '\'' :  '"');
+          } else if (prop === "lightDomContent") {
+            lightDomContent = value; //save the value to insert later - we have to close the tag first, and the order is never guaranteed with a for in loop.
+          }
+        }
+        //close off our string
+        result += '>';
+        //check if we have any light dom content, and if so, insert it to the string.
+        if (lightDomContent) { //if we have a light dom content, insert it now
+          result += lightDomContent;
+          lightDomContent = ''; //and empty it, just to be safe.
+        }
+        result += '</' + this.elementName + '>';
+        if (this.elementProperties['parentComponent']) {
+          result += this.elementProperties['parentComponent'][1];
+        }
+        console.log("result = " + result);
+        //and set _output, using data binding to pass it into ace widget and px-clipboard
+        this.set('_output',result);
       }
-      //close off our string
-      result += '>';
-      //check if we have any light dom content, and if so, insert it to the string.
-      if (lightDomContent) { //if we have a light dom content, insert it now
-        result += lightDomContent;
-        lightDomContent = ''; //and empty it, just to be safe.
-      }
-      result += '</' + this.elementName + '>';
-      //and set _output, using data binding to pass it into ace widget and px-clipboard
-      this.set('_output',result);
     }
   });
 </script>

@@ -59,8 +59,8 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;
-$inuit-enable-padding--small: true;
-$inuit-enable-padding--medium: true;
+$inuit-enable-paddings--small: true;
+$inuit-enable-paddings--large: true;
 @import "px-spacing-design/_trumps.spacing.scss";
 @import "inuit-clearfix/_trumps.clearfix.scss";
 @import "px-spacing-responsive-design/_trumps.spacing-responsive.scss";

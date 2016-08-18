@@ -1,3 +1,7 @@
+v0.2.0
+=================
+* added the ability to specify a parent component
+
 v0.1.6
 =================
 * added css break-all words to editor
