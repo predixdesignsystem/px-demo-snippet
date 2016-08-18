@@ -30,7 +30,7 @@ And insert the element into your code.
     </px-demo-snippet>
 ```
 
-The last step is to data-bind an object with properties to the element (elemProps in the example above):
+The last step is to data-bind an object with properties to the element (elemProps):
 
 ```
 {
@@ -146,7 +146,7 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
 
       if (output.substr(0, 5) !== '<span') {
         //prism highlighter hasn't loaded yet. run this again with async.
-        this.async(this._render, 0);
+        this.async(this._render,50);
       } else {
         this.$.jeditor.innerHTML = output;
       }
@@ -160,6 +160,8 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
     */
     _fireOutputEvent: function(code, lang) {
       //this fires an event that is changed through prism-element.
+      //var test = code.toString();
+
       return this.fire('syntax-highlight', {code: code, lang: lang}).detail.code;
     },
     /**

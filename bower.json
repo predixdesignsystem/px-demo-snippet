@@ -1,6 +1,6 @@
 {
   "name": "px-demo-snippet",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": [
     "px-demo-snippet.html"
   ],
