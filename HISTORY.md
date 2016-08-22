@@ -1,3 +1,7 @@
+v0.2.2
+=================
+* moved prism-element to latest version that supports shadow dom.
+
 v0.2.1
 =================
 * changed async from 0 to 50
