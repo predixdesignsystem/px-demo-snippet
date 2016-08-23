@@ -1,3 +1,7 @@
+v0.3.1
+=================
+* added a title and description to the codepen
+
 v0.3.0
 =================
 * added dynamic code pen the mix
