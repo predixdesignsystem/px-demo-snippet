@@ -1,3 +1,7 @@
+v0.3.0
+=================
+* added dynamic code pen the mix
+
 v0.2.2
 =================
 * moved prism-element to latest version that supports shadow dom.

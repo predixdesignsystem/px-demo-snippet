@@ -579,6 +579,9 @@ a {
   .editor {
     word-break: break-all; } }
 
+.codepen {
+  cursor: pointer; }
+
 /**
  * Margin and padding helper classes. Use these to tweak layout on a micro
  * level.

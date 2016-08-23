@@ -6,9 +6,8 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
 <link rel="import" href="../prism-element/prism-highlighter.html" />
-
-
-
+<link rel="import" href="../iron-ajax/iron-ajax.html" />
+<link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
 
 <!--
 px-demo-snippet is a helper element that displays the un-rendered code of the component requested, along with a clipboard button that - when clicked on - copies the output to the user's clipboard.
@@ -71,8 +70,13 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
       <div class="editor u-mr+ u-p-">
         <div id="jeditor"></div>
       </div>
-      <div class="clipboard u-pr+ u-pt-">
-        <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
+      <div class="clipboard u-pr+ u-pt- flex">
+        <div class="u-mr- codepen">
+          <iron-icon icon="fa:fa-pencil" on-click="_openCodePenRequest"></iron-icon>
+        </div>
+        <div>
+          <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
+        </div>
       </div>
     </div>
 
@@ -99,6 +103,17 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
        * @type String
        */
       elementName: {
+        type: String,
+        value: '',
+      },
+      /**
+       * A property that holds the name of the component parent
+       * for which we are displaying the source. this is used for the codepen import
+       *
+       * @property parentName
+       * @type String
+       */
+      parentName: {
         type: String,
         value: '',
       },
@@ -140,6 +155,60 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
       //first, make sure to find the component we are doing the demo on
       this._findDemoElement();
       this._formatComponentString();
+    },
+    /*
+    *
+    * This method creates a form element and a hidden field,
+    * populates the hidden field value with what's dipslaying on the page,
+    * and submits that over to codepen in a post request,
+    * creating a code pen on the fly.
+    *
+    * @method _openCodePenRequest
+    *
+     */
+    _openCodePenRequest: function() {
+
+      var formEl = document.createElement('form'),
+          hiddenInput = document.createElement('input'),
+          formData = {},
+          JSONstring,
+          //if a parent name was passed in, it's likely a sub component, and we still want to bring in the parent import, which should hold an import to the child (somewhere down the line).
+          parentName = (this.parentName) ? this.parentName : this.elementName;
+
+      // script must be brken or else the browser parses the tag.
+      formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/components/moment*+moment+*">\n' +
+      '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
+      '<' + 'script src="https://rawgit.com/moment/moment/develop/moment.js"></' + 'script>\n' +
+      '<link href="polymer/polymer.html" rel="import">\n' +
+      '<link href="' + parentName + '/' + parentName + '.html" rel="import">\n' +
+      '<link href="px-theme/px-theme.html" rel="import">\n' +
+      '<body>\n' +
+      this._output +
+      '\n</body>\n';
+
+      /*
+      1 first number is for HTML console.
+      00 second and third are for css and JS.
+      1 the last 1 is for the browser console to be open.
+       */
+      formData.editors ="1001";
+
+      //quotes break the JSON, so we gotta replace 'em
+      JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
+
+      formEl.setAttribute('action', 'http://codepen.io/pen/define');
+      formEl.setAttribute('method', 'POST');
+      formEl.setAttribute('target', '_blank');
+
+      hiddenInput.setAttribute('type', 'hidden');
+      hiddenInput.setAttribute('name', 'data');
+      hiddenInput.setAttribute('value', JSONstring);
+
+      formEl.appendChild(hiddenInput);
+
+      //we must append the form for it to work in all browsers.
+      this.appendChild(formEl);
+      formEl.submit();
     },
     _render: function() {
       var  output = this._fireOutputEvent(this._output, 'html');
@@ -254,7 +323,6 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
         if (this.elementProperties['parentComponent']) {
           result += this.elementProperties['parentComponent'][1];
         }
-        console.log("result = " + result);
         //and set _output, using data binding to pass it into ace widget and px-clipboard
         this.set('_output',result);
       }

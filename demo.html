@@ -21,7 +21,8 @@
 
       <px-demo-snippet
         element-properties="[[demoData]]"
-        element-name="px-spinner">
+        element-name="px-data-table-column"
+        parent-name="px-data-table">
       </px-demo-snippet>
     </template>
 
@@ -32,10 +33,8 @@
       var template = document.querySelector('template[is=dom-bind]'),
           demoData = {
              "sized": 34,
-             "parentComponent" : ['<my-element>','</my-element>']
+             "parentComponent" : ['<px-data-table>','</px-data-table>']
           };
-      console.log(template);
-
       template.demoData = demoData;
     });
     </script>

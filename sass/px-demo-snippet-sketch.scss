@@ -56,6 +56,9 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
   }
 }
 
+.codepen {
+  cursor: pointer;
+}
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;
