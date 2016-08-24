@@ -1,3 +1,7 @@
+v0.4.0
+=================
+* added sibling Element
+
 v0.3.2
 =================
 * added px-tabs exception
