@@ -173,14 +173,16 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
           formData = {},
           JSONstring,
           //if a parent name was passed in, it's likely a sub component, and we still want to bring in the parent import, which should hold an import to the child (somewhere down the line).
-          parentName = (this.parentName) ? this.parentName : this.elementName;
+          importComponent = (this.parentName) ? this.parentName : this.elementName;
 
       // script must be brken or else the browser parses the tag.
       formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/components/moment*+moment+*">\n' +
       '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
       '<' + 'script src="https://rawgit.com/moment/moment/develop/moment.js"></' + 'script>\n' +
       '<link href="polymer/polymer.html" rel="import">\n' +
-      '<link href="' + parentName + '/' + parentName + '.html" rel="import">\n' +
+      '<link href="' + importComponent + '/';
+      formData.html += (importComponent === 'px-tabs') ? 'px-tab-set' : importComponent;
+      formData.html += '.html" rel="import">\n' +
       '<link href="px-theme/px-theme.html" rel="import">\n' +
       '<body>\n' +
       this._output +
@@ -192,6 +194,8 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
       1 the last 1 is for the browser console to be open.
        */
       formData.editors ="1001";
+      formData.title = this.elementName;
+      formData.description = "We've set up everything for you to work with " + this.elementName + ", feel free to play around!";
 
       //quotes break the JSON, so we gotta replace 'em
       JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
@@ -293,7 +297,11 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
         if (this.elementProperties['parentComponent']) {
           result += this.elementProperties['parentComponent'][0];
         }
-        result +='<' + this.elementName;
+
+        //px-tabs is the only component we have that doesn't match the element name. sigh.
+        result +='<';
+        result += (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
+
         // and loop through all the properties passed to us.
         for (var prop in this.elementProperties) {
           var singleQuotes = false;
@@ -319,9 +327,18 @@ There are 2 special properties that demo-snippet looks for, and are NOT included
           result += lightDomContent;
           lightDomContent = ''; //and empty it, just to be safe.
         }
-        result += '</' + this.elementName + '>';
+        result += '</';
+        result += (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
+        result += '>';
+
+
         if (this.elementProperties['parentComponent']) {
           result += this.elementProperties['parentComponent'][1];
+        //px-tabs is the only component we have that doesn't match the element name. sigh.
+        } else if (this.elementName === 'px-tabs') {
+          result += '\n<px-tab-pages selected="1">\n';
+          result += '<!-- Please note that selected is usually data-bound in both px-tab-pages and px-tab-set to the same property - something we cannot do in Codepen. -->';
+          result += '<div>Tab 1 content</div>\n<div>Tab 2 content</div>\n<div>Tab 3 content</div>\n<div>Tab 4 content</div>\n</px-tab-pages>';
         }
         //and set _output, using data binding to pass it into ace widget and px-clipboard
         this.set('_output',result);

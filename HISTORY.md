@@ -1,3 +1,7 @@
+v0.3.2
+=================
+* added px-tabs exception
+
 v0.3.1
 =================
 * added a title and description to the codepen
