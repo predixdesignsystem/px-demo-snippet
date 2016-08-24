@@ -1,3 +1,11 @@
+v0.4.1
+=================
+* changed prism highlighter checker from a simple string "<span" to see if the element has been registered on the page.
+
+v0.4.0
+=================
+* added sibling Element
+
 v0.3.2
 =================
 * added px-tabs exception
