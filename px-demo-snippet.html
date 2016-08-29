@@ -73,9 +73,11 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 @homepage index.html
 @demo demo.html
 -->
+<link rel="import" href="css/px-demo-snippet-styles.html">
 <dom-module id="px-demo-snippet">
-  <link rel="import" type="css" href="css/px-demo-snippet.css"/>
   <template>
+    <style include="px-demo-snippet-styles"></style>
+    <style include="px-theme-styles"></style>
     <prism-highlighter></prism-highlighter>
     <div class="flex demoCode">
       <div class="editor u-mr+ u-p-">
