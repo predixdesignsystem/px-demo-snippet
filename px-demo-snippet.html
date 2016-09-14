@@ -193,10 +193,11 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
       '<' + 'script src="https://rawgit.com/moment/moment/develop/moment.js"></' + 'script>\n' +
       '<link href="polymer/polymer.html" rel="import">\n' +
+      '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
+      '<style include="px-theme-styles" is="custom-style"></style>\n' +
       '<link href="' + importComponent + '/';
       formData.html += (importComponent === 'px-tabs') ? 'px-tab-set' : importComponent;
       formData.html += '.html" rel="import">\n' +
-      '<link href="px-theme/px-theme.html" rel="import">\n' +
       '<body>\n' +
       this._output +
       '\n</body>\n';
