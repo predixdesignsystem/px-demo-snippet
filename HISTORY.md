@@ -1,4 +1,4 @@
-v0.4.1
+v0.5.3
 =================
 * changed prism highlighter checker from a simple string "<span" to see if the element has been registered on the page.
 
