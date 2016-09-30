@@ -1,3 +1,8 @@
+v0.6.0
+=================
+* added a setTimeout to prism highlighter until we figure out how to listen to the event listener being registered on that element.
+* added the attributes scriptsIncludes, linksIncludes, and polygitIncludes.
+
 v0.5.3
 =================
 * changed prism highlighter checker from a simple string "<span" to see if the element has been registered on the page.
