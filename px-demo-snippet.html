@@ -173,6 +173,14 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       scriptsIncludes: {
         type: Array,
         value: function() {return [];}
+      },
+      /**
+       * Some components (e.g. px-vis) are too complex to generate codepens
+       * this is a link to an existing codepen
+       * @type String
+       */
+      codeLink: {
+        type: String
       }
     },
     observers: ['_elementPropertyChanged(elementProperties.*)', '_setPropertyChanger(elementName)'],
@@ -193,80 +201,92 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
      */
     _openCodePenRequest: function() {
 
-      var formEl = document.createElement('form'),
-          hiddenInput = document.createElement('input'),
-          formData = {},
-          JSONstring,
-          //if a parent name was passed in, it's likely a sub component, and we still want to bring in the parent import, which should hold an import to the child (somewhere down the line).
-          importComponent = (this.parentName) ? this.parentName : this.elementName,
-          polygitString = '',
-          scriptsString = '',
-          linksString = '',
-          i,
-          inc,
-          len;
+      var formEl = document.createElement('form');
 
-      if (this.polygitIncludes.length) {
-        for (i = 0, inc = this.polygitIncludes, len=inc.length; i < len; i++) {
-          polygitString += inc[i];
-          if (inc[i].charAt(inc[i].length -1) !== '/') {
-            polygitString += '/';
+      if (this.codeLink) {
+
+        var codeLink = this.codeLink;
+        formEl.setAttribute('action', codeLink);
+        formEl.setAttribute('target', '_blank');
+
+        //we must append the form for it to work in all browsers.
+        this.appendChild(formEl);
+        formEl.submit();
+      } else {
+        var hiddenInput = document.createElement('input'),
+            formData = {},
+            JSONstring,
+            //if a parent name was passed in, it's likely a sub component, and we still want to bring in the parent import, which should hold an import to the child (somewhere down the line).
+            importComponent = (this.parentName) ? this.parentName : this.elementName,
+            polygitString = '',
+            scriptsString = '',
+            linksString = '',
+            i,
+            inc,
+            len;
+
+        if (this.polygitIncludes.length) {
+          for (i = 0, inc = this.polygitIncludes, len=inc.length; i < len; i++) {
+            polygitString += inc[i];
+            if (inc[i].charAt(inc[i].length -1) !== '/') {
+              polygitString += '/';
+            }
           }
         }
-      }
 
-      if (this.scriptsIncludes.length) {
-        for (i = 0, inc = this.scriptsIncludes, len=inc.length; i < len; i++) {
-          scriptsString += '<' + 'script src="' + inc[i]+ '"' + '></' + 'script' + '>\n';
+        if (this.scriptsIncludes.length) {
+          for (i = 0, inc = this.scriptsIncludes, len=inc.length; i < len; i++) {
+            scriptsString += '<' + 'script src="' + inc[i]+ '"' + '></' + 'script' + '>\n';
+          }
         }
-      }
 
-      if (this.linksIncludes.length) {
-        for (i = 0, inc = this.linksIncludes, len=inc.length; i < len; i++) {
-          linksString +=   '<link href="' + inc[i] + '" rel="import">\n';
+        if (this.linksIncludes.length) {
+          for (i = 0, inc = this.linksIncludes, len=inc.length; i < len; i++) {
+            linksString +=   '<link href="' + inc[i] + '" rel="import">\n';
+          }
         }
+
+        // script tag must be broken or else the browser parses it.
+        formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/' + polygitString + 'components/">\n' +
+        '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
+        scriptsString +
+        '<link href="polymer/polymer.html" rel="import">\n' +
+        linksString +
+        '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
+        '<style include="px-theme-styles" is="custom-style"></style>\n' +
+        '<link href="' + importComponent + '/';
+        formData.html += (importComponent === 'px-tabs') ? 'px-tab-set' : importComponent;
+        formData.html += '.html" rel="import">\n' +
+        '<body>\n' +
+        this._output +
+        '\n</body>\n';
+
+        /*
+        1 first number is for HTML console.
+        00 second and third are for css and JS.
+        1 the last 1 is for the browser console to be open.
+         */
+        formData.editors ="1001";
+        formData.title = this.elementName;
+        formData.description = "We've set up everything for you to work with " + this.elementName + ", feel free to play around!";
+
+        //quotes break the JSON, so we gotta replace 'em
+        JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
+
+        formEl.setAttribute('action', 'http://codepen.io/pen/define');
+        formEl.setAttribute('method', 'POST');
+        formEl.setAttribute('target', '_blank');
+
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'data');
+        hiddenInput.setAttribute('value', JSONstring);
+
+        formEl.appendChild(hiddenInput);
+
+        //we must append the form for it to work in all browsers.
+        this.appendChild(formEl);
+        formEl.submit();
       }
-
-      // script tag must be broken or else the browser parses it.
-      formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/' + polygitString + 'components/">\n' +
-      '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
-      scriptsString +
-      '<link href="polymer/polymer.html" rel="import">\n' +
-      linksString +
-      '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
-      '<style include="px-theme-styles" is="custom-style"></style>\n' +
-      '<link href="' + importComponent + '/';
-      formData.html += (importComponent === 'px-tabs') ? 'px-tab-set' : importComponent;
-      formData.html += '.html" rel="import">\n' +
-      '<body>\n' +
-      this._output +
-      '\n</body>\n';
-
-      /*
-      1 first number is for HTML console.
-      00 second and third are for css and JS.
-      1 the last 1 is for the browser console to be open.
-       */
-      formData.editors ="1001";
-      formData.title = this.elementName;
-      formData.description = "We've set up everything for you to work with " + this.elementName + ", feel free to play around!";
-
-      //quotes break the JSON, so we gotta replace 'em
-      JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
-
-      formEl.setAttribute('action', 'http://codepen.io/pen/define');
-      formEl.setAttribute('method', 'POST');
-      formEl.setAttribute('target', '_blank');
-
-      hiddenInput.setAttribute('type', 'hidden');
-      hiddenInput.setAttribute('name', 'data');
-      hiddenInput.setAttribute('value', JSONstring);
-
-      formEl.appendChild(hiddenInput);
-
-      //we must append the form for it to work in all browsers.
-      this.appendChild(formEl);
-      formEl.submit();
     },
     _render: function() {
       var name= "prism-highlighter",

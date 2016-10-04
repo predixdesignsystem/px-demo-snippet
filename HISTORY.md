@@ -1,3 +1,7 @@
+v0.6.1
+=================
+* added codeLink attribute for components that can't compile there own codepen e.g. px-vis
+
 v0.6.0
 =================
 * added a setTimeout to prism highlighter until we figure out how to listen to the event listener being registered on that element.
