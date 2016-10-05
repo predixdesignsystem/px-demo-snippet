@@ -1,3 +1,11 @@
+v0.6.3
+=================
+* brought back the span checker until we have a better solution.
+
+v0.6.2
+=================
+* changed timeout to 250 for prism-highlighter
+
 v0.6.1
 =================
 * added codeLink attribute for components that can't compile there own codepen e.g. px-vis

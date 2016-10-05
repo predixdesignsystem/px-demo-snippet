@@ -290,24 +290,14 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     },
     _render: function() {
       var name= "prism-highlighter",
-          output;
+          output = this._fireOutputEvent(this._output, 'html');
 
-       if (Polymer.telemetry.registrations) {
-         var elmMap = Polymer.telemetry.registrations.map(function(elm) {
-           return elm.is;
-         });
-
-         if (elmMap.indexOf(name) !== "-1") {
-          setTimeout(function() {
-            this.$.jeditor.innerHTML = this._fireOutputEvent(this._output, 'html');
-          }.bind(this),250);
-
-         } else {
-           //prism highlighter hasn't loaded yet. run this again with async.
-           this.async(this._render,50);
-         }
+      if (output.substr(0,5) ==="<span") {
+          this.$.jeditor.innerHTML = output;
+       } else {
+         //prism highlighter hasn't loaded yet. run this again with async.
+         this.async(this._render,50);
        }
-
     },
     /**
     *
