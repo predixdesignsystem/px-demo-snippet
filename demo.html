@@ -34,8 +34,11 @@
     window.addEventListener('WebComponentsReady', function() {
       var template = document.querySelector('template[is=dom-bind]'),
           demoData = {
-             "sized": 34,
-             "parentComponent" : ['<px-data-table>','</px-data-table>']
+            "sampleProp0": "value",
+            "sampleProp1": "value",
+            "lightDomContent": "this is placed inside the component output.",
+            "parentComponent": ["<my-element show-option='true'>","</my-element>"],
+            "siblingElement" : "<div>This is a sibling Element</div>"
           };
       template.demoData = demoData;
     });
