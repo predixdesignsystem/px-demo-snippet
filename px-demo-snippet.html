@@ -300,7 +300,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
          if (elmMap.indexOf(name) !== "-1") {
           setTimeout(function() {
             this.$.jeditor.innerHTML = this._fireOutputEvent(this._output, 'html');
-          }.bind(this),100);
+          }.bind(this),250);
 
          } else {
            //prism highlighter hasn't loaded yet. run this again with async.
