@@ -1,3 +1,7 @@
+v0.6.4
+=================
+* added shadow dom support to the snippet highlighting.
+
 v0.6.3
 =================
 * brought back the span checker until we have a better solution.

@@ -8,6 +8,7 @@
 <link rel="import" href="../prism-element/prism-highlighter.html" />
 <link rel="import" href="../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
+<link rel="import" href="../prism-element/prism-theme-default.html">
 
 <!--
 px-demo-snippet is a helper element that displays the un-rendered code of the component requested, along with a clipboard button that - when clicked on - copies the output to the user's clipboard.
@@ -78,6 +79,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
   <template>
     <style include="px-demo-snippet-styles"></style>
     <style include="px-theme-styles"></style>
+    <style is="custom-style" include="prism-theme-default"></style>
+
     <prism-highlighter></prism-highlighter>
     <div class="flex demoCode">
       <div class="editor u-mr+ u-p-">
