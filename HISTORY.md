@@ -1,3 +1,11 @@
+v0.6.5
+=================
+* had hover state and title to codepen/edit icon
+
+v0.6.4
+=================
+* added shadow dom support to the snippet highlighting.
+
 v0.6.4
 =================
 * added shadow dom support to the snippet highlighting.
