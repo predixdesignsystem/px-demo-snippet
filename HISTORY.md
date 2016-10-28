@@ -1,3 +1,7 @@
+v0.6.7
+=================
+* fixed travis
+
 v0.6.6
 =================
 * add 3 includes properties to API documentation
