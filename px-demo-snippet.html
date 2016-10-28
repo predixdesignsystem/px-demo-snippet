@@ -165,21 +165,40 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         notify: true,
         observer: '_render'
       },
+      /**
+       * An array of additional PolyGit includes required to make the CodePen work.
+       *
+       * @property polygitIncludes
+       * @type Array
+       */
       polygitIncludes: {
         type: Array,
         value: function() {return [];}
       },
+      /**
+       * An array of <link> include URLs required to make the CodePen work.
+       *
+       * @property linksIncludes
+       * @type Array
+       */
       linksIncludes: {
         type: Array,
         value: function() {return [];}
       },
+      /**
+       * An array of <script> include URLs required to make the CodePen work.
+       *
+       * @property scriptsIncludes
+       * @type Array
+       */
       scriptsIncludes: {
         type: Array,
         value: function() {return [];}
       },
       /**
        * Some components (e.g. px-vis) are too complex to generate codepens
-       * this is a link to an existing codepen
+       * this is a link to an existing codepen.
+       * @property codeLink
        * @type String
        */
       codeLink: {

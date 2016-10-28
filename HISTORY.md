@@ -1,3 +1,7 @@
+v0.6.6
+=================
+* add 3 includes properties to API documentation
+
 v0.6.5
 =================
 * had hover state and title to codepen/edit icon
