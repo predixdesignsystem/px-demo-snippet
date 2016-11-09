@@ -1,33 +1,33 @@
 {
-  "name": "px-demo-snippet",
-  "version": "0.6.7",
-  "main": [
-    "px-demo-snippet.html"
-  ],
-  "ignore": [
-    ".*",
-    "npm-debug.log",
-    "Gruntfile.js",
-    "sass",
-    "bower_components",
-    "node_modules",
-    "test",
-    ".github",
-    "OSS_Notice.pdf",
-    "scripts"
-  ],
-  "dependencies": {
-    "polymer": "^1.6.0",
-    "px-theme": "~1.1.2",
-    "px-clipboard": "^0.1.1",
-    "prism-element": "PolymerElements/prism-element#~1.1.1",
-    "px-spacing-design": "~0.3.8",
-    "px-polymer-font-awesome": "^0.1.8",
-    "iron-ajax": "^1.4.3"
-  },
-  "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
-    "px-starter-kit-design": "~0.6.0",
-    "px-spinner": "^0.4.0"
-  }
+    "name": "px-demo-snippet",
+    "version": "0.6.8",
+    "main": [
+        "px-demo-snippet.html"
+    ],
+    "ignore": [
+        ".*",
+        "npm-debug.log",
+        "Gruntfile.js",
+        "sass",
+        "bower_components",
+        "node_modules",
+        "test",
+        ".github",
+        "OSS_Notice.pdf",
+        "scripts"
+    ],
+    "dependencies": {
+        "polymer": "^1.6.0",
+        "px-theme": "~1.1.2",
+        "px-clipboard": "~0.1.9",
+        "prism-element": "PolymerElements/prism-element#~1.1.1",
+        "px-spacing-design": "~0.3.8",
+        "px-polymer-font-awesome": "^0.1.8",
+        "iron-ajax": "^1.4.3"
+    },
+    "devDependencies": {
+        "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
+        "px-starter-kit-design": "~0.6.0",
+        "px-spinner": "^0.4.0"
+    }
 }
