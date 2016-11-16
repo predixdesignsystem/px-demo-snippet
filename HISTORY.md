@@ -1,4 +1,9 @@
 
+v0.6.10
+==================
+* changing Gruntfile.js to gulpfile.js
+
+
 v0.6.9
 ==================
 * removed unnecessary px-theme-styles import in px-demo-snippet.html and bower updated px-clipboard

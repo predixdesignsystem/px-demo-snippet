@@ -1,13 +1,13 @@
 {
     "name": "px-demo-snippet",
-    "version": "0.6.9",
+    "version": "0.6.10",
     "main": [
         "px-demo-snippet.html"
     ],
     "ignore": [
         ".*",
         "npm-debug.log",
-        "Gruntfile.js",
+        "gulpfile.js",
         "sass",
         "bower_components",
         "node_modules",
