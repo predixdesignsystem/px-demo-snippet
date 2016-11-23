@@ -1,6 +1,6 @@
 {
     "name": "px-demo-snippet",
-    "version": "0.6.11",
+    "version": "0.6.12",
     "main": [
         "px-demo-snippet.html"
     ],
@@ -27,7 +27,7 @@
     },
     "devDependencies": {
         "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
-        "px-starter-kit-design": "~0.6.0",
+        "px-starter-kit-design": "^0.6.0",
         "px-spinner": "^0.4.0"
     }
 }
