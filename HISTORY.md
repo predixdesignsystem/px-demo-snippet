@@ -1,3 +1,7 @@
+v0.6.15
+==================
+* added background css variable and updated style of the codepen icon
+
 v0.6.14
 ==================
 * Updated dependencies

@@ -1,6 +1,6 @@
 {
   "name": "px-demo-snippet",
-  "version": "0.6.14",
+  "version": "0.6.15",
   "main": [
     "px-demo-snippet.html"
   ],
@@ -23,7 +23,8 @@
     "prism-element": "PolymerElements/prism-element#~1.1.1",
     "px-spacing-design": "^0.4.0",
     "px-polymer-font-awesome": "^1.1.0",
-    "iron-ajax": "^1.4.3"
+    "iron-ajax": "^1.4.3",
+    "px-actionable-text-icons-design": "^1.1.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",

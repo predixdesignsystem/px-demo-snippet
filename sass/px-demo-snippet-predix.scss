@@ -24,13 +24,6 @@ common/abstract rules go in px-demo-snippet-sketch.scss, not in this file.
 
 @import 'px-demo-snippet-sketch.scss';
 
-
-.codepen{
-  color: $gray8;
-  &:hover{
-    color: $primary-blue;
-  }
-  &:active {
-    color: $primary-blue-pressed;
-  }
+.demoCode {
+  background-color: var(--px-demo-snippet-background-color, #eee);
 }
