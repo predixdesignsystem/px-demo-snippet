@@ -1,3 +1,7 @@
+v0.6.16
+==================
+* changing ghp.sh to account for Alpha releases
+
 v0.6.15
 ==================
 * added background css variable and updated style of the codepen icon
