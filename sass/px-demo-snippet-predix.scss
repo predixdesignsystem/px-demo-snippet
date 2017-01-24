@@ -25,5 +25,5 @@ common/abstract rules go in px-demo-snippet-sketch.scss, not in this file.
 @import 'px-demo-snippet-sketch.scss';
 
 .demoCode {
-  background-color: var(--px-demo-snippet-background-color, #eee);
-}
+  background-color: var(--px-demo-snippet-background-color, $gray2);
+} 

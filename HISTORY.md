@@ -1,3 +1,7 @@
+v0.6.18
+==================
+* Updated to cool grays
+
 v0.6.17
 ==================
 * Update colors design to pick up new colors
