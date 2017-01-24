@@ -1,3 +1,7 @@
+v0.6.19
+==================
+* added a try/catch for json stringify
+
 v0.6.18
 ==================
 * Updated to cool grays

@@ -404,7 +404,15 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
           value = this.elementProperties[prop];
           if (value && prop !== "lightDomContent" && prop !== "parentComponent" && prop !== "siblingElement") { //check that value is there AND is NOT false. false attributes should NOT be passed
             if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
-              value = JSON.stringify(value);
+              //JSON.Stringify might fail, and if it does, we don't want to kill the whole thing.
+              try {
+                value = JSON.stringify(value);
+              }
+              catch(e) {
+                //so if it does fail, just continue.
+                continue;
+              }
+
               singleQuotes = true;
             } else if (Array.isArray(value)) {
               singleQuotes = true;
