@@ -201,7 +201,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
        * @type String
        */
       codeLink: {
-        type: String
+        type: String,
+        value: ''
       }
     },
     observers: ['_elementPropertyChanged(elementProperties.*)', '_setPropertyChanger(elementName)'],
@@ -211,9 +212,9 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       this._formatComponentString();
     },
     /*
-    *
+    * We need to dynamically generate the content that goes into the codepen that open.
     * This method creates a form element and a hidden field,
-    * populates the hidden field value with what's dipslaying on the page,
+    * populates the hidden field value of what's displaying on the page,
     * and submits that over to codepen in a post request,
     * creating a code pen on the fly.
     *
@@ -224,6 +225,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 
       var formEl = document.createElement('form');
 
+      //if a codelink was passed using data binding on the px-demo-snippet component call, use that link
       if (this.codeLink) {
 
         var codeLink = this.codeLink;
@@ -234,6 +236,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         this.appendChild(formEl);
         formEl.submit();
       } else {
+        //no codelink was passed, we generate one ourselves. 
         var hiddenInput = document.createElement('input'),
             formData = {},
             JSONstring,
@@ -245,7 +248,9 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
             i,
             inc,
             len;
-
+        
+        // sometimes, we have to add organizations and repos to what polygit has access to - those
+        // are passed in using the polygitIncludes tag, and looped over here.
         if (this.polygitIncludes.length) {
           for (i = 0, inc = this.polygitIncludes, len=inc.length; i < len; i++) {
             polygitString += inc[i];
@@ -255,12 +260,15 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
           }
         }
 
+        // we also occsionally need to add script tag to the code pen, passed in through the scriptsIncludes.
+        // we loop through that here, and create script tags that will be added to the code pen content.
         if (this.scriptsIncludes.length) {
           for (i = 0, inc = this.scriptsIncludes, len=inc.length; i < len; i++) {
             scriptsString += '<' + 'script src="' + inc[i]+ '"' + '></' + 'script' + '>\n';
           }
         }
 
+        //we also need to add link with rel imports occsionally uisng the linksIncludes attribute - we loop thorugh here, creating link tags.
         if (this.linksIncludes.length) {
           for (i = 0, inc = this.linksIncludes, len=inc.length; i < len; i++) {
             linksString +=   '<link href="' + inc[i] + '" rel="import">\n';
@@ -270,9 +278,13 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         // script tag must be broken or else the browser parses it.
         formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/' + polygitString + 'components/">\n' +
         '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
+        //add our external scripts
         scriptsString +
+        //make sure polymer is included
         '<link href="polymer/polymer.html" rel="import">\n' +
+        //add our links
         linksString +
+        //make sure our base links are included.
         '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
         '<style include="px-theme-styles" is="custom-style"></style>\n' +
         '<link href="' + importComponent + '/';
@@ -283,6 +295,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         '\n</body>\n';
 
         /*
+        these number tell codepen what windows it should show in its interface:
         1 first number is for HTML console.
         00 second and third are for css and JS.
         1 the last 1 is for the browser console to be open.
@@ -309,10 +322,23 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         formEl.submit();
       }
     },
+    /**
+    *
+    * prism-highlighter is weird. it expects to be at the top of the path, so when you fire a "syntax-highlight" event, it captures
+    * it. It then take the event.detail.code, does the syntax magic on it, and MUTATES THE event.detail.code object.
+    * this means that the way to get back the highlighted code is to fire an event, and assign the return value into a var
+    * (in this case, the var is output). The second weird thing about it is that there's no gaurantee that it's registered on the page
+    * when you fire said event, so, we have to fire, and check if the returned output is the highlighted one.
+    * the returned output is enclosed in a span, so (sad hack warning), we check for that. if it doesn't have a span, 
+    * we simply call ourselves with 50 ms delay, to give prism-highlighter time to register and pick up our stuff.
+    *
+    * @method {_render}
+    */
     _render: function() {
       var name= "prism-highlighter",
           output = this._fireOutputEvent(this._output, 'html');
-
+      
+      //the correct output, assign it to the jeditor element.
       if (output.substr(0,5) ==="<span") {
           this.$.jeditor.innerHTML = output;
        } else {
@@ -409,6 +435,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
                 value = JSON.stringify(value);
               }
               catch(e) {
+                console.log('stringify failed');
+                console.dir(value);
                 //so if it does fail, just continue.
                 continue;
               }
