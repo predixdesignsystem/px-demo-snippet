@@ -26,4 +26,9 @@ common/abstract rules go in px-demo-snippet-sketch.scss, not in this file.
 
 .demoCode {
   background-color: var(--px-demo-snippet-background-color, $gray2);
-} 
+}
+
+.token.entity {
+  background-color: transparent;
+  cursor: auto;
+}

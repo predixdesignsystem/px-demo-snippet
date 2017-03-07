@@ -1,3 +1,7 @@
+v0.6.20
+==================
+* override prism style for token entity class
+
 v0.6.19
 ==================
 * added a try/catch for json stringify
