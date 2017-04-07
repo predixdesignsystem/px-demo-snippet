@@ -407,7 +407,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
      * @param {Object|Array} obj
      * @return {String}
      */
-    _tryToStringify(obj) {
+    _tryToStringify: function(obj) {
       var value;
       try {
         value = JSON.stringify(obj);
