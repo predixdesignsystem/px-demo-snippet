@@ -5,13 +5,13 @@ document.addEventListener("WebComponentsReady", function() {
 function runCustomTests() {
 
   describe('px-demo-snippet', function () {
-    var demoSnippet;
-
-    beforeEach(function() {
-      demoSnippet = fixture('DemoSnippetFixture');
-    });
-
     describe('unit tests', function() {
+      var demoSnippet;
+
+      beforeEach(function() {
+        demoSnippet = fixture('DemoSnippetFixture');
+      });
+
       it('stringifies a valid Object or Array with `_tryToStringify`', function() {
         var objString = demoSnippet._tryToStringify({"test":"object"});
         var arrString = demoSnippet._tryToStringify(['test','array']);
@@ -84,10 +84,12 @@ function runCustomTests() {
     });
 
     describe('attribute API tests', function() {
+      var demoSnippet;
       var name;
       var props;
 
       beforeEach(function() {
+        demoSnippet = fixture('DemoSnippetFixture');
         name = 'px-foo';
         props = {
           'str' : 'some string',
