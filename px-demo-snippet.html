@@ -192,7 +192,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: Array,
         value: function() {return [];}
       },
-      
+
       /**
        * Some components (e.g. px-vis) are too complex to generate codepens
        * this is a link to an existing codepen.
@@ -207,7 +207,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     observers: ['_elementPropertyChanged(elementProperties.*)'],
 
     attached: function() {
+      this.__highlightCache = {};
       this._callRender();
+    },
+
+    detached: function() {
+      this.__highlightCache = null;
     },
 
     /**
@@ -249,18 +254,31 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
      * prism-highlighter time to register and pick up our stuff.
      */
     _render: function() {
-      if (!this._output || !this._output.length) return;
+      if (!this._output || typeof this._output !== 'string' || !this._output.length) return;
 
-      var name= "prism-highlighter",
-          output = this._fireOutputEvent(this._output, 'html');
+      var highlighted;
 
-      //the correct output, assign it to the jeditor element.
-      if (output.substr(0,5) ==="<span") {
-          this.$.jeditor.innerHTML = output;
-       } else {
-         //prism highlighter hasn't loaded yet. run this again with async.
-         this.async(this._render,50);
-       }
+      // If we've seen this code string before, we don't need to highlight it
+      // Just finish the job and return.
+      if (this.__highlightCache.hasOwnProperty(this._output)) {
+        highlighted = this.__highlightCache[this._output];
+        this.$.jeditor.innerHTML = highlighted;
+        return;
+      }
+
+
+      // Otherwise, send the code for highlighting
+      highlighted = this._fireOutputEvent(this._output, 'html');
+
+      // If prism highlighter hasn't loaded yet, try ourselves again 50ms later
+      if ((typeof highlighted !== 'string') || highlighted.trim().substr(0,5) !== "<span") {
+        this.async(this._render, 50);
+        return;
+      }
+
+      // If we get here, the code is highlighted. Send it to the cache and set it.
+      this.__highlightCache[this._output] = highlighted;
+      this.$.jeditor.innerHTML = highlighted;
     },
 
     /**
