@@ -34,6 +34,12 @@
     window.addEventListener('WebComponentsReady', function() {
       var template = document.querySelector('template[is=dom-bind]'),
           demoData = {
+            "strTrue": "true",
+            "strFalse" : "false",
+            "boolTrue": true,
+            "boolFalse" : false,
+            "arr" : ['hello', 'you'],
+            "obj" : {yes:'thing', other:'thing'},
             "sampleProp0": "value",
             "sampleProp1": "value",
             "lightDomContent": "This is placed inside the component output.",
