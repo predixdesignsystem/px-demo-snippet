@@ -28,6 +28,6 @@
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
     "px-starter-kit-design": "^1.0.0",
-    "px-spinner": "^1.0.0"
+    "px-spinner": "^2.0.0"
   }
 }
