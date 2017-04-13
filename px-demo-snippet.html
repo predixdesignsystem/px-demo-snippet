@@ -6,7 +6,6 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
 <link rel="import" href="../prism-element/prism-highlighter.html" />
-<link rel="import" href="../iron-ajax/iron-ajax.html" />
 <link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
 <link rel="import" href="../prism-element/prism-theme-default.html">
 
@@ -236,7 +235,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         this.appendChild(formEl);
         formEl.submit();
       } else {
-        //no codelink was passed, we generate one ourselves. 
+        //no codelink was passed, we generate one ourselves.
         var hiddenInput = document.createElement('input'),
             formData = {},
             JSONstring,
@@ -248,7 +247,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
             i,
             inc,
             len;
-        
+
         // sometimes, we have to add organizations and repos to what polygit has access to - those
         // are passed in using the polygitIncludes tag, and looped over here.
         if (this.polygitIncludes.length) {
@@ -329,7 +328,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     * this means that the way to get back the highlighted code is to fire an event, and assign the return value into a var
     * (in this case, the var is output). The second weird thing about it is that there's no gaurantee that it's registered on the page
     * when you fire said event, so, we have to fire, and check if the returned output is the highlighted one.
-    * the returned output is enclosed in a span, so (sad hack warning), we check for that. if it doesn't have a span, 
+    * the returned output is enclosed in a span, so (sad hack warning), we check for that. if it doesn't have a span,
     * we simply call ourselves with 50 ms delay, to give prism-highlighter time to register and pick up our stuff.
     *
     * @method {_render}
@@ -337,7 +336,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     _render: function() {
       var name= "prism-highlighter",
           output = this._fireOutputEvent(this._output, 'html');
-      
+
       //the correct output, assign it to the jeditor element.
       if (output.substr(0,5) ==="<span") {
           this.$.jeditor.innerHTML = output;

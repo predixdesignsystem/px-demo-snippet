@@ -1,3 +1,7 @@
+v1.0.0-prerelease
+==================
+* update dependencies for design refresh
+
 v0.6.20
 ==================
 * override prism style for token entity class
