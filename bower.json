@@ -5,6 +5,7 @@
     "px-demo-snippet.html"
   ],
   "ignore": [
+    "*.enc",
     ".*",
     "npm-debug.log",
     "gulpfile.js",
