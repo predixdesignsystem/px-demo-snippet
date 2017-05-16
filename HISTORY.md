@@ -1,6 +1,7 @@
-v1.0.0-prerelease
+v1.0.0
 ==================
 * update dependencies for design refresh
+* added new icons
 
 v0.6.20
 ==================
