@@ -6,7 +6,7 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
 <link rel="import" href="../prism-element/prism-highlighter.html" />
-<link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
+<link rel="import" href="../px-polymer-font-awesome/px-icon-set.html" />
 <link rel="import" href="../prism-element/prism-theme-default.html">
 
 <!--
@@ -86,7 +86,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       </div>
       <div class="clipboard u-pr+ u-pt- flex">
         <div class="u-mr- codepen">
-          <iron-icon title="codepen" class="actionable actionable--action" icon="fa:fa-pencil" on-click="_openCodePenRequest"></iron-icon>
+          <iron-icon title="codepen" class="actionable actionable--action" icon="px:edit" on-click="_openCodePenRequest"></iron-icon>
         </div>
         <div>
           <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
