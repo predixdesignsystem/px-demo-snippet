@@ -306,7 +306,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         //quotes break the JSON, so we gotta replace 'em
         JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
 
-        formEl.setAttribute('action', 'http://codepen.io/pen/define');
+        formEl.setAttribute('action', 'https://codepen.io/pen/define');
         formEl.setAttribute('method', 'POST');
         formEl.setAttribute('target', '_blank');
 

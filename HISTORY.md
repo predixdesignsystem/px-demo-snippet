@@ -2,6 +2,7 @@ v1.0.0
 ==================
 * update dependencies for design refresh
 * added new icons
+* switch codepen url to https
 
 v0.6.20
 ==================
