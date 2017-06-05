@@ -2,8 +2,8 @@
     "name": "px-demo-snippet",
     "author": "General Electric",
     "description": "A Px component",
-    "version": "0.6.20",
-    "private": true,
+    "version": "0.6.21",
+    "private": false,
     "extName": null,
     "repository": {
         "type": "git",

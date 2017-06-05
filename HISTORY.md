@@ -1,3 +1,7 @@
+v0.6.21
+==================
+* switch codepen url to https
+
 v0.6.20
 ==================
 * override prism style for token entity class
