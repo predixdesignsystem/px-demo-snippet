@@ -24,7 +24,7 @@
     "prism-element": "^1.2.0",
     "px-spacing-design": "^1.0.0",
     "px-polymer-font-awesome": "^2.0.0",
-    "px-actionable-text-icons-design": "^2.0.0"
+    "px-actionable-design": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
