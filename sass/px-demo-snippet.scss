@@ -8,33 +8,18 @@
  * under which the software has been supplied.
  */
 
-//
-// Sass for the "sketch" notion of the px-demo-snippet component
-//
-// @author
-//
-
-/*
-THIS FILE SHOULD CONTAIN ONLY ABSTRACT/'SKETCH' THEME RULES, NOT SPECIFIC TO PREDIX BRANDING
-Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
-*/
-
-
+// Settings
+@import "px-colors-design/_settings.colors.scss";
 
 // Generic
 @import "px-normalize-design/_generic.normalize.scss";
 @import "px-box-sizing-design/_generic.box-sizing.scss";
-@import "px-helpers-design/_generic.helpers.scss";
 
 // Base
 @import "px-flexbox-design/_base.flexbox.scss";
-@import "px-viewport-design/_base.viewport.scss";
 
 // Object
 @import 'px-actionable-design/_objects.actionable.scss';
-
-
-
 
 // Component
 .editor {
@@ -47,21 +32,28 @@ Predix branding rules go in px-demo-snippet-predix.scss, not in this file.
 .clipboard {
   border-bottom-right-radius: 5px;
 }
-
 @media (max-width: 750px) {
   .editor {
     word-break: break-all;
   }
 }
-
+.actionable {
+  height: initial;
+}
 .codepen {
   cursor: pointer;
 }
+.demoCode {
+  background-color: var(--px-demo-snippet-background-color, $gray2);
+}
+.token.entity {
+  background-color: transparent;
+  cursor: auto;
+}
+
 // Trumps
 $inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;
 $inuit-enable-paddings--small: true;
 $inuit-enable-paddings--large: true;
 @import "px-spacing-design/_trumps.spacing.scss";
-@import "px-spacing-responsive-design/_trumps.spacing-responsive.scss";
-@import "px-widths-responsive-design/_trumps.widths-responsive.scss";
