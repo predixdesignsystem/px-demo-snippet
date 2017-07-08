@@ -18,17 +18,22 @@
     "scripts"
   ],
   "dependencies": {
-    "polymer": "^1.6.0",
-    "px-theme": "^3.0.0",
+    "polymer": "^1.9.0",
+    "prism-element": "^2.0.0",
     "px-clipboard": "^1.0.0",
-    "prism-element": "^1.2.0",
-    "px-spacing-design": "^1.0.0",
-    "px-polymer-font-awesome": "^2.0.0",
-    "px-actionable-design": "^2.0.0"
+    "px-icon-set": "^2.0.0",
+    "px-theme": "^3.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
-    "px-starter-kit-design": "^1.0.0",
+    "px-actionable-design": "^2.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-colors-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-spacing-design": "^1.0.0",
     "px-spinner": "^2.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^v1.0.0"
   }
 }
