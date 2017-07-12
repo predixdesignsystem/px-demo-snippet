@@ -1,8 +1,8 @@
-#px-demo-snippet
+# px-demo-snippet
 
 ## Overview
 
-px-demo-snippet is a Predix UI component which display the un-rendered, highlighted code of a component.
+The px-demo-snippet component displays the un-rendered, highlighted code of a component.
 
 ## Usage
 
@@ -40,7 +40,7 @@ Finally, use the component in your application:
 <br />
 <hr />
 
-## documentation
+## Documentation
 
 Read the full API and view the demo [here](https://predixdev.github.io/px-demo-snippet).
 
