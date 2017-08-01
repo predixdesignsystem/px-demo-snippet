@@ -473,9 +473,9 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
           result += this.elementProperties['parentComponent'][1];
         //px-tabs is the only component we have that doesn't match the element name. sigh.
         } else if (this.elementName === 'px-tabs') {
-          result += '\n<px-tab-pages selected="1">\n';
-          result += '<!-- Please note that selected is usually data-bound in both px-tab-pages and px-tab-set to the same property - something we cannot do in Codepen. -->';
-          result += '<div>Tab 1 content</div>\n<div>Tab 2 content</div>\n<div>Tab 3 content</div>\n<div>Tab 4 content</div>\n</px-tab-pages>';
+          result += '\n<iron-pages selected="1">\n';
+          result += '<!-- Please note that selected is usually data-bound in both px-tab-set and iron-pages to the same property - something we cannot do in Codepen. -->';
+          result += '<div>Tab 1 content</div>\n<div>Tab 2 content</div>\n<div>Tab 3 content</div>\n<div>Tab 4 content</div>\n</iron-pages>';
         }
         //and set _output, using data binding to pass it into ace widget and px-clipboard
         this.set('_output',result);
