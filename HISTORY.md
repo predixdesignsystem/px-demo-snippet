@@ -1,3 +1,15 @@
+v1.0.1
+==================
+* update tab demo snippet
+
+v1.0.0
+==================
+* update dependencies for design refresh
+* added new icons
+* switch codepen url to https
+* fix IE display issue
+* simplify sass structure
+
 v0.6.20
 ==================
 * override prism style for token entity class

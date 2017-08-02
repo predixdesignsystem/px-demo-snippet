@@ -1,10 +1,11 @@
 {
   "name": "px-demo-snippet",
-  "version": "0.6.20",
+  "version": "1.0.1",
   "main": [
     "px-demo-snippet.html"
   ],
   "ignore": [
+    "*.enc",
     ".*",
     "npm-debug.log",
     "gulpfile.js",
@@ -17,18 +18,22 @@
     "scripts"
   ],
   "dependencies": {
-    "polymer": "^1.6.0",
-    "px-theme": "^2.0.1",
-    "px-clipboard": "^0.2.0",
-    "prism-element": "PolymerElements/prism-element#~1.1.1",
-    "px-spacing-design": "^0.4.0",
-    "px-polymer-font-awesome": "^1.1.0",
-    "iron-ajax": "^1.4.3",
-    "px-actionable-text-icons-design": "^1.1.3"
+    "polymer": "^1.9.0",
+    "prism-element": "^2.0.0",
+    "px-clipboard": "^1.0.0",
+    "px-icon-set": "^2.0.0",
+    "px-theme": "^3.0.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#~v1.1.6",
-    "px-starter-kit-design": "^0.7.0",
-    "px-spinner": "^0.5.0"
+    "px-actionable-design": "^2.0.0",
+    "px-box-sizing-design": "^1.0.0",
+    "px-colors-design": "^1.0.0",
+    "px-flexbox-design": "^1.0.0",
+    "px-normalize-design": "^1.0.0",
+    "px-spacing-design": "^1.0.0",
+    "px-spinner": "^2.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.7.24"
   }
 }

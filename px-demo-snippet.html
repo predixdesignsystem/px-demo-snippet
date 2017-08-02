@@ -6,8 +6,8 @@
 <link rel="import" href="../polymer/polymer.html" />
 <link rel="import" href="../px-clipboard/px-clipboard.html" />
 <link rel="import" href="../prism-element/prism-highlighter.html" />
-<link rel="import" href="../iron-ajax/iron-ajax.html" />
-<link rel="import" href="../px-polymer-font-awesome/polymer-font-awesome.html" />
+<link rel="import" href="../px-icon-set/px-icon-set.html" />
+<link rel="import" href="../px-icon-set/px-icon.html" />
 <link rel="import" href="../prism-element/prism-theme-default.html">
 
 <!--
@@ -89,7 +89,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       </div>
       <div class="clipboard u-pr+ u-pt- flex">
         <div class="u-mr- codepen">
-          <iron-icon title="codepen" class="actionable actionable--action" icon="fa:fa-pencil" on-click="_openCodePenRequest"></iron-icon>
+          <px-icon title="codepen" class="actionable actionable--action" icon="px-utl:edit" on-click="_openCodePenRequest"></px-icon>
         </div>
         <div>
           <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
@@ -481,7 +481,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         }
 
         // script tag must be broken or else the browser parses it.
-        formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/' + polygitString + 'components/">\n' +
+        formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/webcomponentsjs+v0.7.24/polymer+v1.9.1/' + polygitString + 'components/">\n' +
         '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
         //add our external scripts
         scriptsString +
@@ -512,7 +512,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         //quotes break the JSON, so we gotta replace 'em
         JSONstring = JSON.stringify(formData).replace(/"/g, "&​quot;").replace(/'/g, "&apos;");
 
-        formEl.setAttribute('action', 'http://codepen.io/pen/define');
+        formEl.setAttribute('action', 'https://codepen.io/pen/define');
         formEl.setAttribute('method', 'POST');
         formEl.setAttribute('target', '_blank');
 
