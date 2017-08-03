@@ -1,3 +1,7 @@
+v1.1.0
+==================
+* update tab demo snippet
+
 v1.0.1
 ==================
 * update tab demo snippet

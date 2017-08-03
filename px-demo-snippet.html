@@ -79,7 +79,11 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 <link rel="import" href="css/px-demo-snippet-styles.html">
 <dom-module id="px-demo-snippet">
   <template>
-    <style include="px-demo-snippet-styles"></style>
+    <style include="px-demo-snippet-styles" is="custom-style">
+      .keyVal {
+        margin-left: 20px;
+      }
+    </style>
     <style is="custom-style" include="prism-theme-default"></style>
 
     <prism-highlighter></prism-highlighter>
@@ -202,6 +206,16 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       codeLink: {
         type: String,
         value: ''
+      },
+
+      suppressPropertyValues: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      noIndentation: {
+        type: Boolean,
+        value: false
       }
     },
     observers: ['_elementPropertyChanged(elementProperties.*)'],
@@ -266,7 +280,6 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         return;
       }
 
-
       // Otherwise, send the code for highlighting
       highlighted = this._fireOutputEvent(this._output, 'html');
 
@@ -276,9 +289,54 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         return;
       }
 
+      var grouped = this.noIndentation ? highlighted : this._applyGroups(highlighted);
+      var scoped = this._applyStyleScope(grouped);
+
       // If we get here, the code is highlighted. Send it to the cache and set it.
-      this.__highlightCache[this._output] = highlighted;
-      this.$.jeditor.innerHTML = highlighted;
+      this.__highlightCache[this._output] = scoped;
+      this.$.jeditor.innerHTML = scoped;
+    },
+
+    /**
+     * Wrap our highlighter output in divs to allow each attr/value to be on its own line
+     *
+     * returns new html string with divs
+     */
+    _applyGroups: function(html) {
+      var attrs = /(<span class="token attr-name">)/g,  //search for each attr name span
+          openTag = /(<span class="token punctuation">><\/span><\/span>)\s*(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;<\/span>)/g, //search for html tag
+          closingTag = /(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;\/)/g, //search for the end closing tag
+          commentstart = /(<span class="token comment" spellcheck="true">)/g, //I think just for px-tab
+          commentend = /(--><\/span>)/g, //I think just for px-tab
+          lazy = /<\/div>/,  //probably a better way to remove that first one we add, but too lazy
+          str = html.replace(attrs, '</div><div class="keyVal">$1')
+                    .replace(openTag, '$1<div class="openTag"><div>$2')
+                    .replace(closingTag, '</div></div>$1')
+                    .replace(commentstart, '<div class="comment">$1')
+                    .replace(commentend, '$1</div>')
+                    .replace(lazy,'') + '</div>';
+
+      // honestly not sure why this needs to be separate
+      // Prism marks up style attrs a bit differently and does a dumb search for style.
+      // if you have an attr, feature-style for example, it gets the other markup causing the regex to add breaks on the style
+      // this removes the added divs for this case
+      var style = /((<span class="token style-attr language-css">)(<\/div><div class="keyVal"><span class="token attr-name"><\/div><div class="keyVal">))/g,
+          str2 = str.replace(style, '');
+
+      return str2;
+    },
+
+    /**
+     * Hack to apply style scope to our highlighter generated code so we can apply styles
+     *
+     * return highlighter input with style scope added
+     */
+    _applyStyleScope: function(html) {
+      if(Polymer.Settings.useNativeShadow) { return html; }
+
+      var re = /(class="[^"]+)/g,
+          str = html.replace(re, '$1 style-scope px-demo-snippet');
+      return str;
     },
 
     /**
@@ -344,7 +402,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         component = this.elementProperties.parentComponent[0] + component + this.elementProperties.parentComponent[1];
       }
 
-      // this.set('_output', component.trim());
+      if(this.elementName ==='px-tabs') {
+         component += '<!-- Please note that selected is usually data-bound in both px-tab-set and iron-pages to the same property - something we cannot do in here. --> \
+          <iron-pages selected="1"> \
+          <div>Tab 1 content</div><div>Tab 2 content</div><div>Tab 3 content</div><div>Tab 4 content</div></iron-pages>';
+      }
+
       return component;
     },
 
@@ -382,7 +445,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     _printProperties: function(propList, propObj) {
       var arr = propList.reduce(function(accum, prop) {
         var propName = Polymer.CaseMap.camelToDashCase(prop);
-        var propVal = propObj[prop];
+        var propVal = this.suppressPropertyValues.indexOf(prop) > -1 ?
+                      '[[' + prop + ']]' : propObj[prop];
 
         if (typeof propVal === 'boolean' || propVal === 'true' || propVal === 'false') {
           accum = (propVal === true || propVal === "true") ? accum.concat(['' + propName]) : accum;
