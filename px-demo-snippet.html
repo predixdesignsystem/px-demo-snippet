@@ -11,7 +11,9 @@
 <link rel="import" href="../prism-element/prism-theme-default.html">
 
 <!--
-px-demo-snippet is a helper element that displays the un-rendered code of the component requested, along with a clipboard button that - when clicked on - copies the output to the user's clipboard.
+px-demo-snippet is a helper element that displays the source code of a component
+and allows the user to click a button to (a) copy the code or (b) open the code
+sample in CodePen.
 
 ### Usage
 
@@ -78,7 +80,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 <dom-module id="px-demo-snippet">
   <template>
     <style include="px-demo-snippet-styles"></style>
-    <style is="custom-style" include="prism-theme-default"></style>
+    <style include="prism-theme-default"></style>
 
     <prism-highlighter></prism-highlighter>
     <div class="flex demoCode">
@@ -121,6 +123,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: String,
         value: '',
       },
+
       /**
        * A property that holds the name of the component parent
        * for which we are displaying the source. this is used for the codepen import
@@ -132,6 +135,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: String,
         value: '',
       },
+
       /**
        * An object that holds all the properties for the element
        * for which we are displaying the source
@@ -142,16 +146,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       elementProperties: {
         type: Object
       },
-      /**
-       * An object that holds a reference to the component
-       * for which we are displaying the source
-       *
-       * @property _demoElement
-       * @type Object
-       */
-      _demoElement: {
-        type: Object
-      },
+
       /**
        * A string - that is created dynamically by the options selected on the page -
        * that reflects the unrendered component code
@@ -164,6 +159,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         notify: true,
         observer: '_render'
       },
+
       /**
        * An array of additional PolyGit includes required to make the CodePen work.
        *
@@ -174,6 +170,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: Array,
         value: function() {return [];}
       },
+
       /**
        * An array of <link> include URLs required to make the CodePen work.
        *
@@ -184,6 +181,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: Array,
         value: function() {return [];}
       },
+
       /**
        * An array of <script> include URLs required to make the CodePen work.
        *
@@ -194,6 +192,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         type: Array,
         value: function() {return [];}
       },
+
       /**
        * Some components (e.g. px-vis) are too complex to generate codepens
        * this is a link to an existing codepen.
@@ -203,26 +202,281 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       codeLink: {
         type: String,
         value: ''
+      },
+
+      suppressPropertyValues: {
+        type: Array,
+        value: function() { return []; }
+      },
+
+      noIndentation: {
+        type: Boolean,
+        value: false
       }
     },
-    observers: ['_elementPropertyChanged(elementProperties.*)', '_setPropertyChanger(elementName)'],
+    observers: ['_elementPropertyChanged(elementProperties.*)'],
+
     attached: function() {
-      //first, make sure to find the component we are doing the demo on
-      this._findDemoElement();
-      this._formatComponentString();
+      this.__highlightCache = {};
+      this._callRender();
     },
-    /*
-    * We need to dynamically generate the content that goes into the codepen that open.
-    * This method creates a form element and a hidden field,
-    * populates the hidden field value of what's displaying on the page,
-    * and submits that over to codepen in a post request,
-    * creating a code pen on the fly.
-    *
-    * @method _openCodePenRequest
-    *
+
+    detached: function() {
+      this.__highlightCache = null;
+    },
+
+    /**
+     * Attempts to render the current demo code snippet from its configured
+     * attributes.
+     *
+     * @return {String|undefined} - Unhighlighted, stringified code that was sent into the snippet
+     */
+    render: function() {
+      var codeStr = this._formatComponentString();
+      this.set('_output', codeStr);
+      return codeStr;
+    },
+
+    /**
+     * Calls the render function debounced. For internal use to make sure we don't
+     * hammer the render methods.
+     */
+    _callRender: function() {
+      this.debounce('render-element-changes', this.render, 1);
+    },
+
+    /**
+     * Takes the current code from `this._output`, highlights it, and places the
+     * output in the DOM.
+     *
+     * @NOTE: prism-highlighter (which we use to highlight our code) is weird.
+     * It expects to be at the top of the path, so when you fire a "syntax-highlight"
+     * event, it captures it. It then takes the event.detail.code, does the syntax
+     * magic on it, and MUTATES THE event.detail.code object. This means that the
+     * way to get back the highlighted code is to fire an event, and assign the
+     * return value into a var (in this case, the var is output).
+     *
+     * The second weird thing about it is that there's no gaurantee that it's
+     * registered on the page when you fire said event, so, we have to fire, and
+     * check if the returned output is the highlighted one. the returned output
+     * is enclosed in a span, so (sad hack warning), we check for that. If it
+     * doesn't have a span, we simply call ourselves with 50ms delay, to give
+     * prism-highlighter time to register and pick up our stuff.
+     */
+    _render: function() {
+      if (!this._output || typeof this._output !== 'string' || !this._output.length) return;
+
+      var highlighted;
+
+      // If we've seen this code string before, we don't need to highlight it
+      // Just finish the job and return.
+      if (this.__highlightCache.hasOwnProperty(this._output)) {
+        highlighted = this.__highlightCache[this._output];
+        this.$.jeditor.innerHTML = highlighted;
+        this.scopeSubtree(this.$.jeditor, true);
+        return;
+      }
+
+      // Otherwise, send the code for highlighting
+      highlighted = this._fireOutputEvent(this._output, 'html');
+
+      // If prism highlighter hasn't loaded yet, try ourselves again 50ms later
+      if ((typeof highlighted !== 'string') || highlighted.trim().substr(0,5) !== "<span") {
+        this.async(this._render, 50);
+        return;
+      }
+
+      var grouped = this.noIndentation ? highlighted : this._applyGroups(highlighted);
+
+      // If we get here, the code is highlighted. Send it to the cache and set it.
+      this.__highlightCache[this._output] = grouped;
+      this.$.jeditor.innerHTML = grouped;
+      this.scopeSubtree(this.$.jeditor, true);
+
+    },
+
+    /**
+     * Wrap our highlighter output in divs to allow each attr/value to be on its own line
+     *
+     * returns new html string with divs
+     */
+    _applyGroups: function(html) {
+      var attrs = /(<span class="token attr-name">)/g,  //search for each attr name span
+          openTag = /(<span class="token punctuation">><\/span><\/span>)\s*(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;<\/span>)/g, //search for html tag
+          closingTag = /(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;\/)/g, //search for the end closing tag
+          commentstart = /(<span class="token comment" spellcheck="true">)/g, //I think just for px-tab
+          commentend = /(--><\/span>)/g, //I think just for px-tab
+          lazy = /<\/div>/,  //probably a better way to remove that first one we add, but too lazy
+          str = html.replace(attrs, '</div><div class="keyVal">$1')
+                    .replace(openTag, '$1<div class="openTag"><div>$2')
+                    .replace(closingTag, '</div></div>$1')
+                    .replace(commentstart, '<div class="comment">$1')
+                    .replace(commentend, '$1</div>')
+                    .replace(lazy,'') + '</div>';
+
+      // honestly not sure why this needs to be separate
+      // Prism marks up style attrs a bit differently and does a dumb search for style.
+      // if you have an attr, feature-style for example, it gets the other markup causing the regex to add breaks on the style
+      // this removes the added divs for this case
+      var style = /((<span class="token style-attr language-css">)(<\/div><div class="keyVal"><span class="token attr-name"><\/div><div class="keyVal">))/g,
+          str2 = str.replace(style, '');
+
+      return str2;
+    },
+
+    /**
+     * This method fires a syntax-highlight event (meant for prism-highlighter),
+     * and returns the code, with formatting.
+     *
+     * @param  {String} code - Stringified code
+     * @param  {String} lang - The code language (e.g. 'html')
+     * @return {Event} - Reference to the highlight event
+     */
+    _fireOutputEvent: function(code, lang) {
+      return this.fire('syntax-highlight', {code: code, lang: lang}).detail.code;
+    },
+
+    /**
+     * This method is called through a deep observer. Whenever a property on the
+     * demo element is changed, it rebuilds the component string and renders it.
+     */
+    _elementPropertyChanged: function() {
+      this._callRender();
+    },
+
+    /**
+     * Takes the requested element's properties, and the parentComponent,
+     * siblingElement, or lightDomContent (if defined) and turns the result into
+     * an HTML string that can be highlighted and pushed into the DOM.
+     *
+     * @return {String} - The finished HTML string. Will also be pushed to `_output`.
+     */
+    _formatComponentString: function() {
+      if (!this.elementProperties) return;
+
+      var props = Object.keys(this.elementProperties).filter(function(prop) {
+        return prop !== 'lightDomContent' && prop !== 'parentComponent' && prop !== 'siblingElement';
+      });
+
+      var printedProperties = this._printProperties(props, this.elementProperties);
+
+      // Start the empty string we'll print the output HTML into
+      var component = '';
+
+      // @TODO: There is still a special case we handle here for 'px-tabs' which
+      // should be eliminated through an addition to the API. For now it stays
+      // to not break compatability for that component.
+      var elementName = (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
+
+      // Start to print the component
+      component += ' <' + elementName;
+      component += ' ' + printedProperties.join(' ');
+      component += '>';
+
+      if (this.elementProperties.lightDomContent) {
+        component += '' + this.elementProperties.lightDomContent + '';
+      }
+
+      component += '</' + elementName + '>';
+
+      if (this.elementProperties.siblingElement) {
+        component += '' + this.elementProperties.siblingElement;
+      }
+
+      if (this.elementProperties.parentComponent) {
+        component = this.elementProperties.parentComponent[0] + component + this.elementProperties.parentComponent[1];
+      }
+
+      if(this.elementName ==='px-tabs') {
+         component += '<!-- Please note that selected is usually data-bound in both px-tab-set and iron-pages to the same property - something we cannot do in here. --> \
+          <iron-pages selected="1"> \
+          <div>Tab 1 content</div><div>Tab 2 content</div><div>Tab 3 content</div><div>Tab 4 content</div></iron-pages>';
+      }
+
+      return component;
+    },
+
+    /**
+     * Loops over a list of property names/values and converts them to valid
+     * HTML attribute key/values to be printed into an HTML tag.
+     *
+     * Property names will be converted `camelCaseFormat` to 'dash-case-format'
+     * following Polymer's internal rules.
+     *
+     * These rules dictate how each property will get printed depending on the
+     * type/content of its value:
+     *
+     * 1. If the property is type Boolean or type String and 'true' or 'false',
+     * it gets treated as a Boolean. If it is truthy, it will get printed with
+     * no value (e.g. `trueAttr: true` will be printed as true-attr).
+     * 2. If the property is type String or type Number (and not 'true' or 'false'),
+     * it will get printed as name="value" (e.g. `strAttr: 'foo'`` -> str-attr="foo")
+     * 3. If the property is type Object (true or an Object or Array), it will be
+     * JSON.stringified and printed as name='{val}|[val]'.
+     *
+     * A few other cases:
+     *
+     * 1. A property type Number with value `0` will get printed as 'name="0"'
+     * and will not be treated as falsy/coerced into a boolean.
+     * 2. A property type String with value empty string `""` will not get
+     * printed at all
+     * 3. If JSON.stringify fails on a property type Object, it will get printed
+     * as name='[object Object]'
+     *
+     * @param {Array} propList - An array of property names in camelCase
+     * @param {Object} propObj - An object whose keys are items in the `propList` with values of any type
+     * @return {Array} - Array of strings that can be joined with a space to print properties
+     */
+    _printProperties: function(propList, propObj) {
+      var arr = propList.reduce(function(accum, prop) {
+        var propName = Polymer.CaseMap.camelToDashCase(prop);
+        var propVal = this.suppressPropertyValues.indexOf(prop) > -1 ?
+                      '[[' + prop + ']]' : propObj[prop];
+
+        if (typeof propVal === 'boolean' || propVal === 'true' || propVal === 'false') {
+          accum = (propVal === true || propVal === "true") ? accum.concat(['' + propName]) : accum;
+        }
+        else if ((typeof propVal === 'string' && propVal !== "") || typeof propVal === 'number') {
+          accum = accum.concat(['' + propName + '="' + propVal + '"']);
+        }
+        else if (typeof propVal === 'object') {
+          propVal = this._tryToStringify(propVal);
+          accum = accum.concat(['' + propName + '=\'' + propVal + '\'']);
+        }
+
+        return accum;
+      }.bind(this), []);
+      return arr;
+    },
+
+    /**
+     * Attemps to stringify an Object or Array. If it succeeds, return the output
+     * as a string. If it fails, returns string [object Object].
+     *
+     * @param {Object|Array} obj
+     * @return {String}
+     */
+    _tryToStringify: function(obj) {
+      var value;
+      try {
+        value = JSON.stringify(obj);
+      }
+      catch(e) {
+        console.log('stringify failed');
+        console.dir(value);
+        value = '[object Object]'
+      }
+      return value;
+    },
+
+    /**
+     * We need to dynamically generate the content that goes into the codepen
+     * that open. This method creates a form element and a hidden field,
+     * populates the hidden field value of what's displaying on the page,
+     * and submits that over to codepen in a post request, creating a codepen
+     * on the fly.
      */
     _openCodePenRequest: function() {
-
       var formEl = document.createElement('form');
 
       //if a codelink was passed using data binding on the px-demo-snippet component call, use that link
@@ -320,165 +574,6 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         //we must append the form for it to work in all browsers.
         this.appendChild(formEl);
         formEl.submit();
-      }
-    },
-    /**
-    *
-    * prism-highlighter is weird. it expects to be at the top of the path, so when you fire a "syntax-highlight" event, it captures
-    * it. It then take the event.detail.code, does the syntax magic on it, and MUTATES THE event.detail.code object.
-    * this means that the way to get back the highlighted code is to fire an event, and assign the return value into a var
-    * (in this case, the var is output). The second weird thing about it is that there's no gaurantee that it's registered on the page
-    * when you fire said event, so, we have to fire, and check if the returned output is the highlighted one.
-    * the returned output is enclosed in a span, so (sad hack warning), we check for that. if it doesn't have a span,
-    * we simply call ourselves with 50 ms delay, to give prism-highlighter time to register and pick up our stuff.
-    *
-    * @method {_render}
-    */
-    _render: function() {
-      var name= "prism-highlighter",
-          output = this._fireOutputEvent(this._output, 'html');
-
-      //the correct output, assign it to the jeditor element.
-      if (output.substr(0,5) ==="<span") {
-          this.$.jeditor.innerHTML = output;
-       } else {
-         //prism highlighter hasn't loaded yet. run this again with async.
-         this.async(this._render,50);
-       }
-    },
-    /**
-    *
-    * This method fires a syntax-highlight event (meant for prism-highlighter), and returns the code, with formatting.
-    *
-    * @method _fireOutputEvent
-    * @return {Highlighted Code}
-    */
-    _fireOutputEvent: function(code, lang) {
-      //this fires an event that is changed through prism-element.
-
-      return this.fire('syntax-highlight', {code: code, lang: lang}).detail.code;
-    },
-    /**
-    * This method is called through the deep observer, whenever a property is changed
-    * by the user. it calls _setPropertyChanger and _formatComponentString.
-    *
-    * @method _elementPropertyChanged
-    */
-    _elementPropertyChanged: function(changeRecord) {
-      var prop = changeRecord.path,
-          value = changeRecord.value;
-      prop = prop.substr( prop.indexOf('.') + 1 );
-      this._setPropertyChanger(prop, value);
-      this._formatComponentString();
-    },
-    /**
-    * This method searches the document for the component demoed.
-    * and sets a reference in _demoElement to that component.
-    *
-    * @method _findDemoElement
-    */
-    _findDemoElement: function() {
-      //find the demo component
-      var demoElem = document.querySelector(this.elementName);
-      if (demoElem) { //and if it's there, set it inside _demoElement
-        this._demoElement = demoElem;
-      }
-    },
-    /**
-    * This method searches the document for the component demoed.
-    * and sets a reference in _demoElement to that component.
-    *
-    * @method _setPropertyChanger
-    */
-    /**
-    * This event is fired when a property is changed by the user.
-    *
-    * @event pxDemoPropertyChanged
-    */
-    _setPropertyChanger: function(prop, value) {
-      if (this._demoElement) { //make sure the component exists, and if so, call Polymer set directly on it.
-        this._demoElement.set(prop, value);
-        // and fire an event.
-        this.fire('pxDemoPropertyChanged', {"property" : prop, "value": value});
-      }
-    },
-    /**
-    * This method formats the string which is the unrendered code for the component
-    * we are domoing
-    *
-    * @method _formatComponentString
-    */
-    _formatComponentString: function() {
-      //define our opening string with an opening <
-      var result ='',
-          value,
-          lightDomContent,
-          siblingElement;
-
-      if (this.elementProperties) {
-        if (this.elementProperties['parentComponent']) {
-          result += this.elementProperties['parentComponent'][0];
-        }
-
-        //px-tabs is the only component we have that doesn't match the element name. sigh.
-        result +='<';
-        result += (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
-
-        // and loop through all the properties passed to us.
-        for (var prop in this.elementProperties) {
-          var singleQuotes = false;
-          value = this.elementProperties[prop];
-          if (value && prop !== "lightDomContent" && prop !== "parentComponent" && prop !== "siblingElement") { //check that value is there AND is NOT false. false attributes should NOT be passed
-            if (typeof value === "object") { //if the passed value is an object, we have to stringify it, or else it shows [OBJECT OBJECT]
-              //JSON.Stringify might fail, and if it does, we don't want to kill the whole thing.
-              try {
-                value = JSON.stringify(value);
-              }
-              catch(e) {
-                console.log('stringify failed');
-                console.dir(value);
-                //so if it does fail, just continue.
-                continue;
-              }
-
-              singleQuotes = true;
-            } else if (Array.isArray(value)) {
-              singleQuotes = true;
-            }
-            //we are using the built in Polymer method of converting CamelCase to dashes-case, since the properties handed to us must be CamelCase.
-            result += ' ' + Polymer.CaseMap.camelToDashCase(prop) +
-            ((singleQuotes) ? '=\'' :  '="') + value + ((singleQuotes) ? '\'' :  '"');
-          } else if (prop === "lightDomContent") {
-            lightDomContent = value; //save the value to insert later - we have to close the tag first, and the order is never guaranteed with a for in loop.
-          } else if (prop === 'siblingElement') {
-            siblingElement = value;
-          }
-        }
-        //close off our string
-        result += '>';
-        //check if we have any light dom content, and if so, insert it to the string.
-        if (lightDomContent) { //if we have a light dom content, insert it now
-          result += lightDomContent;
-          lightDomContent = ''; //and empty it, just to be safe.
-        }
-        result += '</';
-        result += (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
-        result += '>';
-
-        if (siblingElement) {
-          result += siblingElement;
-        }
-
-        if (this.elementProperties['parentComponent']) {
-          result += this.elementProperties['parentComponent'][1];
-        //px-tabs is the only component we have that doesn't match the element name. sigh.
-        } else if (this.elementName === 'px-tabs') {
-          result += '\n<iron-pages selected="1">\n';
-          result += '<!-- Please note that selected is usually data-bound in both px-tab-set and iron-pages to the same property - something we cannot do in Codepen. -->';
-          result += '<div>Tab 1 content</div>\n<div>Tab 2 content</div>\n<div>Tab 3 content</div>\n<div>Tab 4 content</div>\n</iron-pages>';
-        }
-        //and set _output, using data binding to pass it into ace widget and px-clipboard
-        this.set('_output',result);
       }
     }
   });

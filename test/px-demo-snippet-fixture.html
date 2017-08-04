@@ -11,19 +11,33 @@
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
     <script src="../web-component-tester/browser.js"></script>
-    <link rel="import" href="../px-demo-snippet.html" />
     <!-- Retain this link for px-theme.html -->
     <!-- px-theme is needed for WCT to run without errors -->
-    <link rel="import" href="../../px-theme/px-theme-styles.html">
-    <style include="px-theme-styles" is="custom-style"></style>
-    <!-- This script link will contain the generated script for basic wct test cases -->
-    <script src="px-demo-snippet-base-tests.js"></script>
+    <link rel="import" href="../bower_components/px-theme/px-theme-styles.html"/>
+    <!-- Load local components to test -->
+    <link rel="import" href="../px-demo-snippet.html" />
     <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
-    <script src="px-demo-snippet-custom-tests.js"></script>
+    <script src="px-demo-snippet-tests.js"></script>
   </head>
 
   <body>
-    <h3>Web Component Test : Fixture for px-demo-snippet</h3>
-    <px-demo-snippet id="px_demo_snippet_1"></px-demo-snippet>
+    <style include="px-theme-styles" is="custom-style"></style>
+
+    <test-fixture id="DemoSnippetFixture">
+      <template>
+        <px-demo-snippet no-indentation></px-demo-snippet>
+      </template>
+    </test-fixture>
+    <test-fixture id="DemoSnippetFixtureWithIndents">
+      <template>
+        <px-demo-snippet></px-demo-snippet>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="NestedDemoSnippet">
+      <template>
+        <px-demo-snippet></px-demo-snippet>
+      </template>
+    </test-fixture>
   </body>
 </html>

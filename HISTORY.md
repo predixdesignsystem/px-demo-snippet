@@ -1,3 +1,9 @@
+v1.1.0
+==================
+* update tab demo snippet
+* Added ability to have snippet indent on tags and attrs
+* Change buttons to be abs positioned so they dont take area away from the snippet
+
 v1.0.1
 ==================
 * update tab demo snippet
