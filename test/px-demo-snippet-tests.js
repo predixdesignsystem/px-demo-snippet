@@ -10,6 +10,7 @@ function runCustomTests() {
 
       beforeEach(function() {
         demoSnippet = fixture('DemoSnippetFixture');
+        indentationFixture = fixture('DemoSnippetFixtureWithIndents');
       });
 
       it('stringifies a valid Object or Array with `_tryToStringify`', function() {
@@ -120,10 +121,14 @@ function runCustomTests() {
         demoSnippet.set('elementProperties', props);
 
         setTimeout(function() {
-          var content = demoSnippet.querySelector('#jeditor');
+          // this is slightly bad because we are checking the output of Prism, but if it changes, then our regexs to add indentation will break, so bof.
+          var content = demoSnippet.querySelector('#jeditor'),
+              styleScope = ' style-scope px-demo-snippet',
+              snippet = ' <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>px-foo</span> <span class="token attr-name">str</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>some string<span class="token punctuation">"</span></span> <span class="token attr-name">arr</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">\'</span>[<span class="token punctuation">"</span>item1<span class="token punctuation">"</span>,<span class="token punctuation">"</span>item2<span class="token punctuation">"</span>]<span class="token punctuation">\'</span></span> <span class="token attr-name">bool-true</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>px-foo</span><span class="token punctuation">&gt;</span></span>',
+              html = content.innerHTML.split(styleScope).join('');
           expect(content.innerHTML).not.to.be.empty;
           expect(content.innerHTML).to.include(name);
-          expect(content.innerHTML).to.include('<span class="token tag">');
+          expect(html).to.equal(snippet);
           done();
         }, 500);
       });
@@ -139,6 +144,96 @@ function runCustomTests() {
         setTimeout(function() {
           var content = demoSnippet.querySelector('#jeditor');
           expect(content.innerHTML).to.include('A_NEW_STRING');
+          done();
+        }, 500);
+      });
+    });
+
+    describe('Appling basic indentation', function() {
+      var demoSnippet;
+      var name;
+      var props;
+
+      beforeEach(function() {
+        demoSnippet = fixture('DemoSnippetFixtureWithIndents');
+        name = 'px-foo';
+        props = {
+          'str' : 'some string',
+          'arr' : ['item1', 'item2'],
+          'boolTrue' : true,
+          'boolFalse' : false,
+          'myAttrWithStyle' : 'foo' //need to check an attr with the word style in it. Prism marks it up differently
+        };
+      });
+
+      it('highlights and renders its code with divs', function(done) {
+        demoSnippet.set('elementName', name);
+        demoSnippet.set('elementProperties', props);
+
+        setTimeout(function() {
+          var content = demoSnippet.querySelector('#jeditor'),
+              styleScope = ' style-scope px-demo-snippet',
+              snippet = ' <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>px-foo</span> <div class="keyVal"><span class="token attr-name">str</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>some string<span class="token punctuation">"</span></span> </div><div class="keyVal"><span class="token attr-name">arr</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">\'</span>[<span class="token punctuation">"</span>item1<span class="token punctuation">"</span>,<span class="token punctuation">"</span>item2<span class="token punctuation">"</span>]<span class="token punctuation">\'</span></span> </div><div class="keyVal"><span class="token attr-name">bool-true</span> </div><div class="keyVal"><span class="token attr-name">my-attr-with-</span><span class="token attr-name">style</span><span class="token punctuation">="</span><span class="token attr-value">foo</span><span class="token punctuation">"</span><span class="token punctuation">&gt;</span></div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>px-foo</span><span class="token punctuation">&gt;</span></span></span>',
+              html = content.innerHTML.split(styleScope).join('');
+          expect(content.innerHTML).not.to.be.empty;
+          expect(content.innerHTML).to.include(name);
+          expect(html).to.equal(snippet);
+          done();
+        }, 500);
+      });
+
+      it('applies a style-scope when needed', function(done) {
+        demoSnippet.set('elementName', name);
+        demoSnippet.set('elementProperties', props);
+
+        setTimeout(function() {
+          var content = demoSnippet.querySelector('#jeditor'),
+              styleScope = ' style-scope px-demo-snippet';
+          if(Polymer.Settings.useNativeShadow) {
+            expect(content.innerHTML).to.not.include(styleScope);
+          } else {
+            expect(content.innerHTML).to.include(styleScope);
+          }
+          done();
+        }, 500);
+      });
+    });
+
+    describe('Applying indentation with nested tags', function() {
+      var demoSnippet;
+      var name;
+      var props;
+
+      beforeEach(function() {
+        demoSnippet = fixture('NestedDemoSnippet');
+        name = 'px-foo';
+        props = {
+          'str' : 'some string',
+          'arr' : ['item1', 'item2'],
+          'boolTrue' : true,
+          'boolFalse' : false,
+          'parentComponent':[
+            '<div style="height:400px;width:600px;display:flex"><px-bar flex-to-size disable-scroll-zoom disable-touch-zoom>',
+            '</px-bar></div>'
+          ],
+          'siblingElement': [
+            '<px-bof url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"></px-bof>'
+          ]
+        }
+      });
+
+      it('highlights and renders its code with divs', function(done) {
+        demoSnippet.set('elementName', name);
+        demoSnippet.set('elementProperties', props);
+
+        setTimeout(function() {
+          var content = demoSnippet.querySelector('#jeditor'),
+              styleScope = ' style-scope px-demo-snippet',
+              snippet = '<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token style-attr language-css"><div class="keyVal"><span class="token attr-name"> </span></div><div class="keyVal"><span class="token attr-name">style</span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">height</span><span class="token punctuation">:</span>400px<span class="token punctuation">;</span><span class="token property">width</span><span class="token punctuation">:</span>600px<span class="token punctuation">;</span><span class="token property">display</span><span class="token punctuation">:</span>flex</span><span class="token punctuation">"</span><span class="token punctuation">&gt;</span><div class="openTag"><div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>px-bar</span> </span></div><div class="keyVal"><span class="token attr-name">flex-to-size</span> </div><div class="keyVal"><span class="token attr-name">disable-scroll-zoom</span> </div><div class="keyVal"><span class="token attr-name">disable-touch-zoom</span><span class="token punctuation">&gt;</span><div class="openTag"><div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>px-foo</span> </span></div><div class="keyVal"><span class="token attr-name">str</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>some string<span class="token punctuation">"</span></span> </div><div class="keyVal"><span class="token attr-name">arr</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">\'</span>[<span class="token punctuation">"</span>item1<span class="token punctuation">"</span>,<span class="token punctuation">"</span>item2<span class="token punctuation">"</span>]<span class="token punctuation">\'</span></span> </div><div class="keyVal"><span class="token attr-name">bool-true</span><span class="token punctuation">&gt;</span></div></div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>px-foo</span><span class="token punctuation">&gt;</span></span><div class="openTag"><div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>px-bof</span> </span></div><div class="keyVal"><span class="token attr-name">url</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></div></div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>px-bof</span><span class="token punctuation">&gt;</span></span></div></div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>px-bar</span><span class="token punctuation">&gt;</span></span></div><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span></span></span>',
+              html = content.innerHTML.split(styleScope).join('');
+          expect(content.innerHTML).not.to.be.empty;
+          expect(content.innerHTML).to.include(name);
+          expect(html).to.equal(snippet);
           done();
         }, 500);
       });

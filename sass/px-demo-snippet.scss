@@ -31,7 +31,14 @@
 }
 .clipboard {
   border-bottom-right-radius: 5px;
+  position: absolute;
+  right: 20px;
 }
+
+.keyVal {
+  margin-left: 20px;
+}
+
 @media (max-width: 750px) {
   .editor {
     word-break: break-all;

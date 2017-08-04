@@ -18,15 +18,23 @@
     <link rel="import" href="../px-demo-snippet.html" />
     <!-- This script link will contain the generated script stub for custom, developer-added test cases -->
     <script src="px-demo-snippet-tests.js"></script>
-
-    <script src="../../test-fixture/test-fixture-mocha.js"></script>
-    <link href="../../test-fixture/test-fixture.html" rel="import">
   </head>
 
   <body>
     <style include="px-theme-styles" is="custom-style"></style>
 
     <test-fixture id="DemoSnippetFixture">
+      <template>
+        <px-demo-snippet no-indentation></px-demo-snippet>
+      </template>
+    </test-fixture>
+    <test-fixture id="DemoSnippetFixtureWithIndents">
+      <template>
+        <px-demo-snippet></px-demo-snippet>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="NestedDemoSnippet">
       <template>
         <px-demo-snippet></px-demo-snippet>
       </template>
