@@ -79,8 +79,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 <link rel="import" href="css/px-demo-snippet-styles.html">
 <dom-module id="px-demo-snippet">
   <template>
-    <style include="px-demo-snippet-styles" is="custom-style"></style>
-    <style is="custom-style" include="prism-theme-default"></style>
+    <style include="px-demo-snippet-styles"></style>
+    <style include="prism-theme-default"></style>
 
     <prism-highlighter></prism-highlighter>
     <div class="flex demoCode">
@@ -273,6 +273,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       if (this.__highlightCache.hasOwnProperty(this._output)) {
         highlighted = this.__highlightCache[this._output];
         this.$.jeditor.innerHTML = highlighted;
+        this.scopeSubtree(this.$.jeditor, true);
         return;
       }
 
@@ -286,11 +287,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       }
 
       var grouped = this.noIndentation ? highlighted : this._applyGroups(highlighted);
-      var scoped = this._applyStyleScope(grouped);
 
       // If we get here, the code is highlighted. Send it to the cache and set it.
-      this.__highlightCache[this._output] = scoped;
-      this.$.jeditor.innerHTML = scoped;
+      this.__highlightCache[this._output] = grouped;
+      this.$.jeditor.innerHTML = grouped;
+      this.scopeSubtree(this.$.jeditor, true);
+
     },
 
     /**
@@ -320,19 +322,6 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
           str2 = str.replace(style, '');
 
       return str2;
-    },
-
-    /**
-     * Hack to apply style scope to our highlighter generated code so we can apply styles
-     *
-     * return highlighter input with style scope added
-     */
-    _applyStyleScope: function(html) {
-      if(Polymer.Settings.useNativeShadow) { return html; }
-
-      var re = /(class="[^"]+)/g,
-          str = html.replace(re, '$1 style-scope px-demo-snippet');
-      return str;
     },
 
     /**
