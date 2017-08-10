@@ -1,3 +1,7 @@
+v1.1.1
+==================
+* Fix comment for analyzer
+
 v1.1.0
 ==================
 * update tab demo snippet
