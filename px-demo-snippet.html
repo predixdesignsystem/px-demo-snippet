@@ -1,14 +1,10 @@
-<!--
-    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
-    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
-    'grunt depserve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
--->
-<link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../px-clipboard/px-clipboard.html" />
-<link rel="import" href="../prism-element/prism-highlighter.html" />
-<link rel="import" href="../px-icon-set/px-icon-set.html" />
-<link rel="import" href="../px-icon-set/px-icon.html" />
-<link rel="import" href="../prism-element/prism-theme-default.html">
+<link rel="import" href="../polymer/polymer.html"/>
+<link rel="import" href="../px-clipboard/px-clipboard.html"/>
+<link rel="import" href="../prism-element/prism-highlighter.html"/>
+<link rel="import" href="../px-icon-set/px-icon-set.html"/>
+<link rel="import" href="../px-icon-set/px-icon.html"/>
+<link rel="import" href="../prism-element/prism-theme-default.html"/>
+<link rel="import" href="css/px-demo-snippet-styles.html"/>
 
 <!--
 px-demo-snippet is a helper element that displays the source code of a component
@@ -70,13 +66,11 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
   ```
 
 
-
 @element px-demo-snippet
 @blurb px-demo-snippet is a helper element that displays the un-rendered code of the component requested.
 @homepage index.html
-@demo demo.html
+@demo index.html
 -->
-<link rel="import" href="css/px-demo-snippet-styles.html">
 <dom-module id="px-demo-snippet">
   <template>
     <style include="px-demo-snippet-styles"></style>
