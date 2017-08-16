@@ -1,3 +1,7 @@
+v1.1.2
+==================
+* Make code container position relative so clipboard is contained within it
+
 v1.1.1
 ==================
 * Fix comment for analyzer
