@@ -51,6 +51,7 @@
   cursor: pointer;
 }
 .demoCode {
+  position: relative;
   background-color: var(--px-demo-snippet-background-color, $gray2);
 }
 .token.entity {
