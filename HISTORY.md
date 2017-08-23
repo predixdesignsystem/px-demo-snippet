@@ -1,3 +1,7 @@
+v1.1.4
+==================
+* Fix accidental delete
+
 v1.1.3
 ==================
 * Removing px-tabs case
