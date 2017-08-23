@@ -357,11 +357,6 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       // Start the empty string we'll print the output HTML into
       var component = '';
 
-      // @TODO: There is still a special case we handle here for 'px-tabs' which
-      // should be eliminated through an addition to the API. For now it stays
-      // to not break compatability for that component.
-      var elementName = (this.elementName ==='px-tabs') ? 'px-tab-set' : this.elementName;
-
       // Start to print the component
       component += ' <' + elementName;
       component += ' ' + printedProperties.join(' ');
@@ -379,12 +374,6 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 
       if (this.elementProperties.parentComponent) {
         component = this.elementProperties.parentComponent[0] + component + this.elementProperties.parentComponent[1];
-      }
-
-      if(this.elementName ==='px-tabs') {
-         component += '<!-- Please note that selected is usually data-bound in both px-tab-set and iron-pages to the same property - something we cannot do in here. --> \
-          <iron-pages selected="1"> \
-          <div>Tab 1 content</div><div>Tab 2 content</div><div>Tab 3 content</div><div>Tab 4 content</div></iron-pages>';
       }
 
       return component;
@@ -536,7 +525,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
         '<style include="px-theme-styles" is="custom-style"></style>\n' +
         '<link href="' + importComponent + '/';
-        formData.html += (importComponent === 'px-tabs') ? 'px-tab-set' : importComponent;
+        formData.html += importComponent;
         formData.html += '.html" rel="import">\n' +
         '<body>\n' +
         this._output +
