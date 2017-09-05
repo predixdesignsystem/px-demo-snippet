@@ -31,7 +31,8 @@
     "px-flexbox-design": "^1.0.0",
     "px-normalize-design": "^1.0.0",
     "px-spacing-design": "^1.0.0",
-    "px-spinner": "^2.0.0"
+    "px-spinner": "^2.0.0",
+    "px-helpers-design": "^1.0.7"
   },
   "resolutions": {
     "webcomponentsjs": "^0.7.24"

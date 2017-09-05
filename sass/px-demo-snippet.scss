@@ -14,6 +14,7 @@
 // Generic
 @import "px-normalize-design/_generic.normalize.scss";
 @import "px-box-sizing-design/_generic.box-sizing.scss";
+@import "px-helpers-design/_generic.helpers.scss";
 
 // Base
 @import "px-flexbox-design/_base.flexbox.scss";
@@ -22,46 +23,89 @@
 @import 'px-actionable-design/_objects.actionable.scss';
 
 // Component
-.editor {
-  flex-basis: 85%;
-  min-height: calculateRem(100px);
-  flex-grow: 1;
-  border-bottom-left-radius: 5px;
-  word-break: break-all;
+:host{
+--px-clipboard-icon-color: #677e8c;
 }
+
+.demoCode {
+  position: relative;
+  background-color: var(--px-demo-snippet-background-color, $gray2);
+  padding: 0 $inuit-base-spacing-unit--large $inuit-base-spacing-unit--large $inuit-base-spacing-unit--large;
+  display: none;
+}
+.demoCode[expand-code] {
+  display: block;
+}
+
 .clipboard {
   border-bottom-right-radius: 5px;
-  position: absolute;
-  right: 20px;
+  background-color: #e2e8ed;
+  right: 30px;
+  z-index: 5;
+  padding: 10px 20px;
+}
+
+.clipboard__buttons {
+  margin-right: 10px;
+  min-width: 30px;
+  padding: 5px;
+}
+
+/*******************************************************************************
+ * highlighter output
+ ******************************************************************************/
+.token.entity {
+  background-color: transparent;
+  cursor: auto;
 }
 
 .keyVal {
   margin-left: 20px;
 }
 
-@media (max-width: 750px) {
-  .editor {
-    word-break: break-all;
+.editor {
+  overflow: hidden;
+  word-break: break-all;
+}
+
+/*******************************************************************************
+ * Breakpoint 675px and up
+ ******************************************************************************/
+@include media-query(lap-and-up) {
+  .demoCode {
+    max-height: calculateRem(185px);
+    display: block;
+    padding: 30px 20px 20px 20px;
+    overflow: hidden;
   }
-}
-.actionable {
-  height: initial;
-}
-.codepen {
-  cursor: pointer;
-}
-.demoCode {
-  position: relative;
-  background-color: var(--px-demo-snippet-background-color, $gray2);
-}
-.token.entity {
-  background-color: transparent;
-  cursor: auto;
+  .demoCode[expand-code] {
+    max-height: none;
+  }
+
+  .clipboard {
+    background-color: #e2e8ed;
+    position: absolute;
+    right: 30px;
+    z-index: 5;
+    padding: 5px 10px;
+  }
+  .clipboard__buttons {
+    margin-right: 0;
+    min-width: 0;
+    padding: 0;
+    margin-left: 10px;
+  }
+
+  .clipboard__buttons {
+    cursor: pointer;
+  }
+
 }
 
 // Trumps
-$inuit-enable-margins--large: true;
 $inuit-enable-margins--small: true;
+$inuit-enable-margins: true;
+$inuit-enable-margins--large: true;
 $inuit-enable-paddings--small: true;
 $inuit-enable-paddings--large: true;
 @import "px-spacing-design/_trumps.spacing.scss";
