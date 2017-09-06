@@ -4,6 +4,8 @@
 <link rel="import" href="../px-icon-set/px-icon-set.html"/>
 <link rel="import" href="../px-icon-set/px-icon.html"/>
 <link rel="import" href="../prism-element/prism-theme-default.html"/>
+<link rel="import" href="../iron-media-query/iron-media-query.html"/>
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html"/>
 <link rel="import" href="css/px-demo-snippet-styles.html"/>
 
 <!--
@@ -77,6 +79,10 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     <style include="prism-theme-default"></style>
 
     <prism-highlighter></prism-highlighter>
+
+    <iron-media-query query="(max-width: 716px)" query-matches="{{_isMobile}}">
+    </iron-media-query>
+
     <!--buttons-->
     <div class="clipboard flex">
       <div class="clipboard__buttons">
@@ -85,9 +91,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       <div class="clipboard__buttons">
         <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
       </div>
-      <div class="clipboard__buttons">
-        <button class="actionable actionable--secondary" on-tap="handleShowMore">{{expandText}}</button>
-      </div>
+
+      <template is="dom-if" if="{{_shouldShowButton(_isMobile, _codeHeight)}}">
+        <div class="clipboard__buttons clipboard__buttons--expand">
+          <button class="actionable actionable--secondary" on-tap="handleShowMore">{{expandText}}</button>
+        </div>
+      </template>
     </div>
 
     <!--code-->
@@ -226,10 +235,18 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
        */
       expandText:{
         type: String,
-        value: "Show More"
+        value: "Expand Code"
+      },
+      _codeHeight:{
+        type: Number,
+        value: 0
       }
     },
     observers: ['_elementPropertyChanged(elementProperties.*)'],
+    behaviors: [ Polymer.IronResizableBehavior ],
+    listeners: {
+      'iron-resize': '_onIronResize'
+    },
 
     attached: function() {
       this.__highlightCache = {};
@@ -242,9 +259,22 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 
     handleShowMore: function() {
       var a = this.expandCode;
-      var btnText = a ? 'Show More' : 'Show Less';
+      var btnText = a ? 'Expand Code' : 'Collapse Code';
       this.set('expandCode', !a);
       this.set('expandText', btnText);
+    },
+    _shouldShowButton: function(_isMobile, _codeHeight){
+      if(_isMobile){ return true;};
+
+      //ran too early if _codeHeight = 0
+      if(_codeHeight !== 0 && _codeHeight > 145){
+        return true;
+        };
+      return false
+    },
+    _onIronResize: function(){
+      if(this._isMobile){return};
+      this._codeHeight = this.$.jeditor.getBoundingClientRect().height;
     },
     /**
      * Attempts to render the current demo code snippet from its configured
@@ -311,8 +341,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 
       // If we get here, the code is highlighted. Send it to the cache and set it.
       this.__highlightCache[this._output] = grouped;
-      this.$.jeditor.innerHTML = grouped;
-      this.scopeSubtree(this.$.jeditor, true);
+
+      window.requestAnimationFrame(function(){
+        this.$.jeditor.innerHTML = grouped;
+        this.scopeSubtree(this.$.jeditor, true);
+        this._codeHeight = this.$.jeditor.getBoundingClientRect().height;
+      }.bind(this));
 
     },
 

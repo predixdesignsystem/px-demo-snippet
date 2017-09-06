@@ -22,7 +22,9 @@
     "prism-element": "^2.0.0",
     "px-clipboard": "^1.0.0",
     "px-icon-set": "^2.0.0",
-    "px-theme": "^3.0.0"
+    "px-theme": "^3.0.0",
+    "iron-media-query": "^2.0.0",
+    "iron-resizable-behavior": "^2.0.1"
   },
   "devDependencies": {
     "px-actionable-design": "^2.0.0",
