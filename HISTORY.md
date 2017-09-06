@@ -1,3 +1,7 @@
+v1.2.0
+==================
+* Added the `expand code` functionality to editor
+
 v1.1.4
 ==================
 * Fix accidental delete
