@@ -86,7 +86,9 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     <!--buttons-->
     <div class="clipboard flex">
       <div class="clipboard__buttons">
-        <px-icon title="codepen" class="actionable actionable--secondary" icon="px-utl:edit" on-click="_openCodePenRequest"></px-icon>
+        <template is="dom-if" if="{{!hideCodepen}}">
+          <px-icon title="codepen" class="actionable actionable--secondary" icon="px-utl:edit" on-click="_openCodePenRequest"></px-icon>
+        </template>
       </div>
       <div class="clipboard__buttons">
         <px-clipboard data-clipboard-text="[[_output]]"></px-clipboard>
@@ -236,6 +238,13 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
       expandText:{
         type: String,
         value: "Expand Code"
+      },
+      /**
+      * hides the codepen button altogether
+      */
+      hideCodepen: {
+        type: Boolean,
+        value: false
       },
       _codeHeight:{
         type: Number,

@@ -1,3 +1,7 @@
+v1.2.1
+==================
+* Added the `hide-codepen` property
+
 v1.2.0
 ==================
 * Added the `expand code` functionality to editor
