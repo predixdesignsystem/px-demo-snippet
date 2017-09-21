@@ -1,3 +1,7 @@
+v1.2.2
+==================
+* fix dark theme
+
 v1.2.1
 ==================
 * Added the `hide-codepen` property

@@ -85,7 +85,7 @@
   }
 
   .clipboard {
-    background-color: $gray2;
+    background-color: var(--px-demo-snippet-background-color, $gray2);
     position: absolute;
     right: calculateRem(30px);
     z-index: 5;
