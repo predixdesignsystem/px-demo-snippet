@@ -6,4 +6,6 @@ bower_components
 reports
 css/noprefix
 .yo-rc.json
-
+bower_components-*/
+bower-*.json
+monogram-wdmk.png
