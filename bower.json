@@ -20,8 +20,8 @@
   "dependencies": {
     "polymer": "#1.9 - 2",
     "prism-element": "^2.0.0",
-    "px-clipboard": "polymer2.0-preview",
-    "px-icon-set": "polymer2.0-preview",
+    "px-clipboard": "^1.0.0",
+    "px-icon-set": "^2.0.0",
     "px-theme": "^3.0.0",
     "iron-media-query": "^2.0.0",
     "iron-resizable-behavior": "^2.0.1"
@@ -35,10 +35,14 @@
     "px-spacing-design": "^1.0.0",
     "px-spinner": "polymer2.0-preview",
     "px-helpers-design": "^1.0.7",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^6.0.0",
+    "px-demo": "^3.0.0"
   },
   "resolutions": {
-    "webcomponentsjs": "^1.0.0"
+    "webcomponentsjs": "^1.0.0",
+    "px-icon-set": "^2.0.0",
+    "px-clipboard": "^1.0.0",
+    "px-deck-selector": "^2.0.0"
   },
   "variants": {
     "1.x": {

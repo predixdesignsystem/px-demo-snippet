@@ -7,45 +7,52 @@
     <title>
       px-demo-snippet Demo</title>
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
     <link rel="import" href="px-demo-snippet.html" />
+    <link rel="import" href="../polymer/lib/elements/dom-bind.html" />
     <link rel="import" href="../px-theme/px-theme-styles.html">
-    <style include="px-theme-styles" is="custom-style"></style>
-
+    <custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>
 
   </head>
 
   <body>
 
     <h3>Demo</h3>
-    <template is="dom-bind">
-
-      <px-demo-snippet
-        element-properties="[[demoData]]"
-        element-name="px-data-table-column"
-        parent-name="px-data-table">
-      </px-demo-snippet>
-    </template>
+    <dom-bind>
+      <template is="dom-bind">
+        <px-demo-snippet
+          element-properties="[[demoData]]"
+          element-name="px-data-table-column"
+          parent-name="px-data-table">
+        </px-demo-snippet>
+      </template>
+    </dom-bind>
 
     <script>
     //for demo purposes only. use data binding in your app instead.
 
     window.addEventListener('WebComponentsReady', function() {
-      var template = document.querySelector('template[is=dom-bind]'),
-          demoData = {
-            "strTrue": "true",
-            "strFalse" : "false",
-            "boolTrue": true,
-            "boolFalse" : false,
-            "arr" : ['hello', 'you'],
-            "obj" : {yes:'thing', other:'thing'},
-            "sampleProp0": "value",
-            "sampleProp1": "value",
-            "lightDomContent": "This is placed inside the component output.",
-            "parentComponent": ["<my-element show-option>","</my-element>"],
-            "siblingElement" : "<div>This is a sibling Element</div>"
-          };
+      if (Polymer.Element) {
+        var template = document.querySelector('dom-bind');
+      } else {
+        var template = document.querySelector('template[is=dom-bind]');
+      }
+      var demoData = {
+        "strTrue": "true",
+        "strFalse" : "false",
+        "boolTrue": true,
+        "boolFalse" : false,
+        "arr" : ['hello', 'you'],
+        "obj" : {yes:'thing', other:'thing'},
+        "sampleProp0": "value",
+        "sampleProp1": "value",
+        "lightDomContent": "This is placed inside the component output.",
+        "parentComponent": ["<my-element show-option>","</my-element>"],
+        "siblingElement" : "<div>This is a sibling Element</div>"
+      };
       template.demoData = demoData;
     });
     </script>
