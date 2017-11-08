@@ -33,7 +33,7 @@
     "px-flexbox-design": "^1.0.0",
     "px-normalize-design": "^1.0.0",
     "px-spacing-design": "^1.0.0",
-    "px-spinner": "polymer2.0-preview",
+    "px-spinner": "^2.0.0",
     "px-helpers-design": "^1.0.7",
     "web-component-tester": "^6.0.0",
     "px-demo": "^3.0.0"
