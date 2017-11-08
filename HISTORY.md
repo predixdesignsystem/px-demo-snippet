@@ -1,3 +1,7 @@
+v1.3.1
+==================
+* Sub in released dependency versions
+
 v1.3.0
 ==================
 * Polymer 1.x/2.x hybrid support.
