@@ -1,10 +1,13 @@
-describe('px-demo-snippet', function () {
+describe('px-demo-snippet', function (done) {
   describe('unit tests', function() {
     var demoSnippet;
 
-    beforeEach(function() {
+    beforeEach(function(done) {
       demoSnippet = fixture('DemoSnippetFixture');
       indentationFixture = fixture('DemoSnippetFixtureWithIndents');
+      flush(()=>{
+        done();
+      });
     });
 
     it('stringifies a valid Object or Array with `_tryToStringify`', function() {
