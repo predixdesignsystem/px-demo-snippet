@@ -1,3 +1,7 @@
+v1.3.2
+==================
+* remove old dependency resolutions
+
 v1.3.1
 ==================
 * Sub in released dependency versions
