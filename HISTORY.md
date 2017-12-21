@@ -1,3 +1,7 @@
+v1.3.3
+==================
+* Check if highlight cache exists before using it
+
 v1.3.2
 ==================
 * remove old dependency resolutions
