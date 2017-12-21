@@ -330,7 +330,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
 
       // If we've seen this code string before, we don't need to highlight it
       // Just finish the job and return.
-      if (this.__highlightCache.hasOwnProperty(this._output)) {
+      if (this.__highlightCache && this.__highlightCache.hasOwnProperty(this._output)) {
         highlighted = this.__highlightCache[this._output];
         this.$.jeditor.innerHTML = highlighted;
         this.scopeSubtree(this.$.jeditor, true);
