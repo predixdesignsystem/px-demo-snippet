@@ -87,7 +87,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
     <div class="clipboard flex">
       <div class="clipboard__buttons">
         <template is="dom-if" if="{{!hideCodepen}}">
-          <px-icon title="codepen" class="actionable actionable--secondary" icon="px-utl:edit" on-click="_openCodePenRequest"></px-icon>
+          <px-icon title="codepen" class="actionable actionable--secondary" icon="px-utl:edit" on-tap="_openCodePenRequest"></px-icon>
         </template>
       </div>
       <div class="clipboard__buttons">
@@ -584,8 +584,8 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         }
 
         // script tag must be broken or else the browser parses it.
-        formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/webcomponentsjs+v0.7.24/polymer+v1.9.1/' + polygitString + 'components/">\n' +
-        '<' + 'script src="webcomponentsjs/webcomponents-lite.min.js"' + '></' + 'script' + '>\n' +
+        formData.html = '<base href="https://polygit.org/px-*+PredixDev+*/webcomponentsjs+v1.0.22/polymer+v2.3.1/' + polygitString + 'components/">\n' +
+        '<' + 'script src="webcomponentsjs/webcomponents-lite.js"' + '></' + 'script' + '>\n' +
         //add our external scripts
         scriptsString +
         //make sure polymer is included
@@ -594,10 +594,12 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         linksString +
         //make sure our base links are included.
         '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
-        '<style include="px-theme-styles" is="custom-style"></style>\n' +
         '<link href="' + importComponent + '/';
         formData.html += importComponent;
         formData.html += '.html" rel="import">\n' +
+        '<custom-style>\n' +
+        '\t<style include="px-theme-styles" is="custom-style"></style>\n' +
+        '</custom-style>\n' +
         '<body>\n' +
         this._output +
         '\n</body>\n';
@@ -626,7 +628,11 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         formEl.appendChild(hiddenInput);
 
         //we must append the form for it to work in all browsers.
-        this.appendChild(formEl);
+        if (Polymer.Element){
+          this.shadowRoot.appendChild(formEl);
+        } else{
+          this.appendChild(formEl);
+        }
         formEl.submit();
       }
     }

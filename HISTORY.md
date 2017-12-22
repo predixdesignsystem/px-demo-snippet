@@ -1,3 +1,7 @@
+v1.3.4
+==================
+* Codepen fixes for Firefox and correct polygit dependency versions
+
 v1.3.3
 ==================
 * Check if highlight cache exists before using it
