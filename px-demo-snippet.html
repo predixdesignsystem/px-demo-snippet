@@ -579,7 +579,7 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         //we also need to add link with rel imports occsionally uisng the linksIncludes attribute - we loop thorugh here, creating link tags.
         if (this.linksIncludes.length) {
           for (i = 0, inc = this.linksIncludes, len=inc.length; i < len; i++) {
-            linksString +=   '<link href="' + inc[i] + '" rel="import">\n';
+            linksString +=   '<link rel="import" href="' + inc[i] + '"/>\n';
           }
         }
 
@@ -589,20 +589,16 @@ There are 3 special properties that demo-snippet looks for, and are NOT included
         //add our external scripts
         scriptsString +
         //make sure polymer is included
-        '<link href="polymer/polymer.html" rel="import">\n' +
+        '<link rel="import" href="polymer/polymer.html"/>\n' +
+        '<link rel="import" href="px-theme/px-theme-styles.html"/>\n' +
+        //make sure our base links are included.
+        '<link rel="import" href="' + importComponent + '/' + importComponent + '.html"/>\n' +
         //add our links
         linksString +
-        //make sure our base links are included.
-        '<link rel="import" href="px-theme/px-theme-styles.html">\n' +
-        '<link href="' + importComponent + '/';
-        formData.html += importComponent;
-        formData.html += '.html" rel="import">\n' +
         '<custom-style>\n' +
-        '\t<style include="px-theme-styles" is="custom-style"></style>\n' +
-        '</custom-style>\n' +
-        '<body>\n' +
-        this._output +
-        '\n</body>\n';
+        '  <style include="px-theme-styles" is="custom-style"></style>\n' +
+        '</custom-style>\n\n' +
+        this._output;
 
         /*
         these number tell codepen what windows it should show in its interface:
