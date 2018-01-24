@@ -1,3 +1,7 @@
+v1.3.5
+==================
+* Clean up CodePen example code
+
 v1.3.4
 ==================
 * Codepen fixes for Firefox and correct polygit dependency versions
