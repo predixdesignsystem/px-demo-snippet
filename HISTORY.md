@@ -1,3 +1,7 @@
+v1.3.6
+==================
+* reduce icon-set imports
+
 v1.3.5
 ==================
 * Clean up CodePen example code
