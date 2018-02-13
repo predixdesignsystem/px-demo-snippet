@@ -1,3 +1,7 @@
+v1.3.7
+==================
+* fix travis and tests for hybrid
+
 v1.3.6
 ==================
 * reduce icon-set imports

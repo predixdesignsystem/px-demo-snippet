@@ -1,6 +1,7 @@
 describe('px-demo-snippet', function (done) {
   describe('unit tests', function() {
     var demoSnippet;
+    var indentationFixture;
 
     beforeEach(function(done) {
       demoSnippet = fixture('DemoSnippetFixture');
