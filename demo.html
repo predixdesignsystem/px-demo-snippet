@@ -23,54 +23,75 @@ limitations under the License.
     <title>
       px-demo-snippet Demo</title>
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
-    <link rel="import" href="px-demo-snippet.html" />
-    <link rel="import" href="../polymer/lib/elements/dom-bind.html" />
-    <link rel="import" href="../px-theme/px-theme-styles.html">
-    <custom-style>
+    <script type="module" src="./px-demo-snippet.js"></script>
+    <script type="module" src="../@polymer/polymer/lib/elements/dom-bind.js"></script>
+    <script type="module" src="../px-theme/px-theme-styles.js"></script>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
       <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 
   </head>
 
   <body>
 
-    <h3>Demo</h3>
-    <dom-bind>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>Demo</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-bind>
       <template is="dom-bind">
-        <px-demo-snippet
-          element-properties="[[demoData]]"
-          element-name="px-data-table-column"
-          parent-name="px-data-table">
+        <px-demo-snippet element-properties="[[demoData]]" element-name="px-data-table-column" parent-name="px-data-table">
         </px-demo-snippet>
       </template>
-    </dom-bind>
+    </dom-bind>`;
 
-    <script>
-    //for demo purposes only. use data binding in your app instead.
+document.body.appendChild($_documentContainer.content);
+</script>
 
-    window.addEventListener('WebComponentsReady', function() {
-      if (Polymer.Element) {
-        var template = document.querySelector('dom-bind');
-      } else {
-        var template = document.querySelector('template[is=dom-bind]');
-      }
-      var demoData = {
-        "strTrue": "true",
-        "strFalse" : "false",
-        "boolTrue": true,
-        "boolFalse" : false,
-        "arr" : ['hello', 'you'],
-        "obj" : {yes:'thing', other:'thing'},
-        "sampleProp0": "value",
-        "sampleProp1": "value",
-        "lightDomContent": "This is placed inside the component output.",
-        "parentComponent": ["<my-element show-option>","</my-element>"],
-        "siblingElement" : "<div>This is a sibling Element</div>"
-      };
-      template.demoData = demoData;
-    });
-    </script>
+    <script type="module">
+import './px-demo-snippet.js';
+import '@polymer/polymer/lib/elements/dom-bind.js';
+import 'px-theme/px-theme-styles.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+if (PolymerElement) {
+  var template = document.querySelector('dom-bind');
+} else {
+  var template = document.querySelector('template[is=dom-bind]');
+}
+var demoData = {
+  "strTrue": "true",
+  "strFalse" : "false",
+  "boolTrue": true,
+  "boolFalse" : false,
+  "arr" : ['hello', 'you'],
+  "obj" : {yes:'thing', other:'thing'},
+  "sampleProp0": "value",
+  "sampleProp1": "value",
+  "lightDomContent": "This is placed inside the component output.",
+  "parentComponent": ["<my-element show-option>","</my-element>"],
+  "siblingElement" : "<div>This is a sibling Element</div>"
+};
+template.demoData = demoData;
+</script>
   </body>
 </html>
